@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comanda Digital — Fast Food</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ─── ESTILOS ADICIONALES KFC-STYLE CON AZUL + GLASS ─── */
+        .kfc-hero {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 1.5rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4);
+        }
+
+        .kfc-card {
+            background: rgba(255,255,255,0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.55);
+            border-radius: 1.25rem;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.34,1.1,0.64,1);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.3);
+            position: relative;
+        }
+
+        .kfc-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(6,182,212,0.12), inset 0 1px 0 rgba(255,255,255,0.5);
+            border-color: rgba(6,182,212,0.3);
+        }
+
+        .kfc-card .card-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .kfc-card:hover .card-img {
+            transform: scale(1.1);
+        }
+
+        .kfc-card .card-body {
+            padding: 1rem 1.25rem 1.25rem;
+        }
+
+        .kfc-card .card-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 0.02em;
+            color: #111827;
+            line-height: 1.1;
+        }
+
+        .kfc-card .card-desc {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .kfc-card .card-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.85rem;
+            color: #0891b2;
+            letter-spacing: 0.02em;
+        }
+
+        .kfc-card .add-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(8,145,178,0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 900;
+            border: 1px solid rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 16px rgba(8,145,178,0.25), inset 0 1px 0 rgba(255,255,255,0.3);
+            flex-shrink: 0;
+        }
+
+        .kfc-card .add-btn:hover {
+            transform: scale(1.15);
+            background: rgba(6,182,212,0.95);
+            box-shadow: 0 8px 24px rgba(6,182,212,0.35), inset 0 1px 0 rgba(255,255,255,0.4);
+        }
+
+        .kfc-card .add-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* ─── CARRITO LATERAL GLASS AZUL ─── */
+        .cart-panel {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.45);
+            border-radius: 1.5rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.3);
+            position: sticky;
+            top: 80px;
+            overflow: hidden;
+        }
+
+        .cart-header {
+            background: rgba(8,145,178,0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            color: #0e7490;
+            padding: 1rem 1.25rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .cart-header::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -15%;
+            width: 140px;
+            height: 140px;
+            background: rgba(6,182,212,0.15);
+            border-radius: 50%;
+            filter: blur(20px);
+        }
+
+        .cart-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 100px;
+            height: 100px;
+            background: rgba(103,232,249,0.2);
+            border-radius: 50%;
+            filter: blur(15px);
+        }
+
+        .cart-header h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            position: relative;
+            z-index: 1;
+            color: #0e7490;
+        }
+
+        .cart-item {
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 0.875rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: all 0.25s ease;
+        }
+
+        .cart-item:hover {
+            background: rgba(255,255,255,0.65);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .cart-qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid rgba(8,145,178,0.3);
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(4px);
+            color: #0891b2;
+            font-weight: 900;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .cart-qty-btn:hover {
+            background: rgba(8,145,178,0.85);
+            color: white;
+            border-color: rgba(8,145,178,0.5);
+            box-shadow: 0 2px 8px rgba(8,145,178,0.2);
+        }
+
+        .cart-total-bar {
+            background: rgba(17,24,39,0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #111827;
+            padding: 1rem 1.25rem;
+            border-radius: 0 0 1.5rem 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .cart-total-bar .total-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: #0891b2;
+        }
+
+        .btn-confirm {
+            background: rgba(8,145,178,0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            padding: 0.875rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255,255,255,0.4);
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(8,145,178,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-confirm::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-confirm:hover::before {
+            left: 100%;
+        }
+
+        .btn-confirm:hover {
+            background: rgba(6,182,212,0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(6,182,212,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+        }
+
+        .btn-confirm:active {
+            transform: translateY(0);
+        }
+
+        /* ─── CATEGORÍAS GLASS AZUL ─── */
+        .cat-pill {
+            padding: 0.5rem 1.25rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .cat-pill:hover {
+            background: rgba(8,145,178,0.2);
+            color: #0891b2;
+            border-color: rgba(8,145,178,0.3);
+        }
+
+        .cat-pill.active {
+            background: rgba(8,145,178,0.75);
+            backdrop-filter: blur(12px);
+            color: white;
+            border-color: rgba(8,145,178,0.5);
+            box-shadow: 0 4px 16px rgba(8,145,178,0.25), inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        /* ─── SCROLLBAR CARRITO ─── */
+        .cart-scroll::-webkit-scrollbar { width: 4px; }
+        .cart-scroll::-webkit-scrollbar-track { background: transparent; }
+        .cart-scroll::-webkit-scrollbar-thumb { background: rgba(8,145,178,0.3); border-radius: 10px; }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .kfc-card .card-img { height: 150px; }
+            .kfc-card .card-title { font-size: 1.35rem; }
+            .cart-panel { position: fixed; bottom: 0; left: 0; right: 0; top: auto; border-radius: 1.5rem 1.5rem 0 0; z-index: 50; max-height: 70vh; }
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex flex-col">
+
+    <!-- ─── HEADER ─── -->
+    <header class="w-full bg-gray-900/80 backdrop-blur-md border-b border-gray-800 px-4 py-3 sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-cyan-600 flex items-center justify-center
+                            text-white text-sm font-black flex-shrink-0" id="user-avatar-letter">
+                    M
+                </div>
+                <div>
+                    <p class="text-cyan-400 font-bold text-[9px] uppercase tracking-widest leading-none">
+                        Mesero Activo
+                    </p>
+                    <p id="userName" class="text-white font-black text-sm leading-tight mt-0.5">
+                        Cargando...
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <!-- Pedidos en cola (badge) -->
+                <div id="orders-in-queue" class="hidden items-center gap-1.5 bg-amber-500/10 border
+                     border-amber-500/30 text-amber-400 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase">
+                    <span class="animate-pulse">●</span>
+                    <span id="queue-count">0</span> en cocina
+                </div>
+                <a href="roles1.html"
+                   class="bg-gray-800 hover:bg-red-900/40 text-gray-400 hover:text-red-400
+                          px-3 py-2 rounded-lg text-[10px] font-black uppercase transition-all border border-gray-700">
+                    ← Rol
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ─── MAIN ─── -->
+    <main class="flex-1 max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-5 p-4">
+
+        <!-- ── COLUMNA IZQUIERDA: MENÚ ── -->
+        <div class="lg:col-span-2">
+
+            <!-- Hero / Filtros + Mesa -->
+            <div class="kfc-hero flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="font-black uppercase text-2xl tracking-tight text-gray-900" style="font-family:'Bebas Neue',sans-serif;letter-spacing:0.03em;">
+                        🍗 Nuestro Menú
+                    </h2>
+                    <p class="text-gray-500 text-xs font-semibold mt-0.5">Selecciona tus favoritos</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <!-- Categorías scroll horizontal -->
+                    <div class="flex gap-2 overflow-x-auto pb-1" style="scrollbar-width:none;-ms-overflow-style:none;">
+                        <button class="cat-pill active" onclick="filterCat('all',this)">Todo</button>
+                        <button class="cat-pill" onclick="filterCat('combo',this)">Combos</button>
+                        <button class="cat-pill" onclick="filterCat('pollo',this)">Pollo</button>
+                        <button class="cat-pill" onclick="filterCat('burger',this)">Burgers</button>
+                        <button class="cat-pill" onclick="filterCat('extra',this)">Extras</button>
+                    </div>
+                    <select id="mesa"
+                        class="bg-white/70 border border-gray-300/60 text-gray-900 text-xs rounded-xl
+                               px-3 py-2.5 outline-none focus:ring-2 focus:ring-cyan-500 font-bold backdrop-blur-sm">
+                        <option value="Mesa 1">🪑 Mesa 1</option>
+                        <option value="Mesa 2">🪑 Mesa 2</option>
+                        <option value="Mesa 3">🪑 Mesa 3</option>
+                        <option value="Mesa 4">🪑 Mesa 4</option>
+                        <option value="Mesa 5">🪑 Mesa 5</option>
+                        <option value="Para Llevar">📦 Para Llevar</option>
+                        <option value="Domicilio">🛵 Domicilio</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grid de Menú KFC-Style -->
+            <div id="contenedor-menu"
+                 class="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                 style="max-height: calc(100vh - 220px); overflow-y: auto; padding-right: 4px;">
+                <!-- Ítems se renderizan por JS -->
+            </div>
+
+        </div>
+
+        <!-- ── COLUMNA DERECHA: CARRITO GLASS AZUL ── -->
+        <div class="lg:col-span-1">
+            <div class="cart-panel flex flex-col" style="max-height: calc(100vh - 100px);">
+
+                <!-- Header glass azul del carrito -->
+                <div class="cart-header flex justify-between items-center">
+                    <div>
+                        <h2>🛒 TU PEDIDO</h2>
+                        <p id="mesa-display" class="text-cyan-700 text-[10px] font-bold mt-0.5 uppercase tracking-wider">Mesa 1</p>
+                    </div>
+                    <span id="item-count"
+                          class="w-8 h-8 bg-cyan-500/30 rounded-full text-cyan-800 text-xs font-black
+                                 flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-cyan-400/30">
+                        0
+                    </span>
+                </div>
+
+                <!-- Lista de ítems -->
+                <div id="lista-seleccionada"
+                     class="flex-1 overflow-y-auto p-3 cart-scroll"
+                     style="min-height: 120px;">
+                </div>
+
+                <!-- Notas -->
+                <div class="px-3 pb-2">
+                    <textarea id="observaciones"
+                        placeholder="📝 Notas: sin cebolla, término medio..."
+                        class="w-full bg-white/50 border border-gray-300/50 rounded-xl p-2.5 text-xs
+                               text-gray-900 focus:ring-2 focus:ring-cyan-500 outline-none resize-none
+                               placeholder-gray-400 backdrop-blur-sm"
+                        rows="2">
+                    </textarea>
+                </div>
+
+                <!-- Total + Botón -->
+                <div class="cart-total-bar">
+                    <div class="flex justify-between items-baseline mb-3">
+                        <span class="text-xs text-gray-600 uppercase font-black tracking-wider">Total</span>
+                        <span id="total-precio" class="total-price">
+                            $0
+                        </span>
+                    </div>
+                    <button id="btn-enviar" onclick="submitOrder()"
+                        class="btn-confirm">
+                        🚀 Confirmar Pedido
+                    </button>
+                    <button onclick="clearOrder()"
+                        class="w-full mt-2 text-[10px] text-gray-500 hover:text-gray-800 uppercase font-black
+                               transition-colors py-1">
+                        Vaciar Pedido
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script src="registro.js"></script>
+    <script>
+        // ─── DATOS DE MENÚ DE EJEMPLO ───
+        const menuData = [
+            { id: 1, nombre: "Bucket 8 Piezas", desc: "8 piezas de pollo crujiente + 2 complementos + 2 bebidas", precio: 189, categoria: "combo", img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=300&fit=crop" },
+            { id: 2, nombre: "Mega Combo Familiar", desc: "12 piezas + 4 complementos + 4 bebidas + 4 postres", precio: 299, categoria: "combo", img: "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=400&h=300&fit=crop" },
+            { id: 3, nombre: "2 Piezas de Pollo", desc: "Pollo original crujiente, jugoso por dentro", precio: 89, categoria: "pollo", img: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&h=300&fit=crop" },
+            { id: 4, nombre: "3 Piezas de Pollo", desc: "Triple porción de pollo frito dorado", precio: 119, categoria: "pollo", img: "https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=400&h=300&fit=crop" },
+            { id: 5, nombre: "Zinger Burger", desc: "Filete de pollo picante, lechuga, mayonesa, pan brioche", precio: 95, categoria: "burger", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop" },
+            { id: 6, nombre: "Doble Crunch Burger", desc: "Doble filete crujiente, queso cheddar, salsa BBQ", precio: 115, categoria: "burger", img: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400&h=300&fit=crop" },
+            { id: 7, nombre: "Papas Fritas Grandes", desc: "Papas doradas y crujientes, tamaño familiar", precio: 45, categoria: "extra", img: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=400&h=300&fit=crop" },
+            { id: 8, nombre: "Puré de Papa con Gravy", desc: "Puré cremoso con salsa gravy casera", precio: 39, categoria: "extra", img: "https://images.unsplash.com/photo-1574484284008-7d1f3c4d9e0a?w=400&h=300&fit=crop" },
+            { id: 9, nombre: "Coleslaw", desc: "Repollo fresco con aderezo especial", precio: 35, categoria: "extra", img: "https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?w=400&h=300&fit=crop" },
+            { id: 10, nombre: "Biscuit de Miel", desc: "Panecillo suave con mantequilla de miel", precio: 25, categoria: "extra", img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop" },
+            { id: 11, nombre: "Refresco 600ml", desc: "Coca-Cola, Sprite, Fanta o agua", precio: 28, categoria: "extra", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&h=300&fit=crop" },
+            { id: 12, nombre: "Pie de Manzana", desc: "Postre caliente con canela y manzana", precio: 32, categoria: "extra", img: "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?w=400&h=300&fit=crop" }
+        ];
+
+        let cart = [];
+
+        // ─── RENDERIZAR MENÚ ───
+        function renderMenu(filter = 'all') {
+            const container = document.getElementById('contenedor-menu');
+            container.innerHTML = '';
+
+            const items = filter === 'all' ? menuData : menuData.filter(m => m.categoria === filter);
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'kfc-card';
+                card.innerHTML = `
+                    <div style="overflow:hidden;border-radius:1.25rem 1.25rem 0 0;">
+                        <img src="${item.img}" alt="${item.nombre}" class="card-img" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <div class="flex justify-between items-start gap-2">
+                            <div class="flex-1 min-w-0">
+                                <h3 class="card-title">${item.nombre}</h3>
+                                <p class="card-desc">${item.desc}</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="card-price">$${item.precio}</span>
+                            <button class="add-btn" onclick="addToCart(${item.id})" title="Agregar">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // ─── FILTRAR CATEGORÍA ───
+        function filterCat(cat, btn) {
+            document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            renderMenu(cat);
+        }
+
+        // ─── AGREGAR AL CARRITO ───
+        function addToCart(id) {
+            const item = menuData.find(m => m.id === id);
+            const existing = cart.find(c => c.id === id);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ ...item, qty: 1 });
+            }
+            renderCart();
+        }
+
+        // ─── CAMBIAR CANTIDAD ───
+        function changeQty(id, delta) {
+            const item = cart.find(c => c.id === id);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cart = cart.filter(c => c.id !== id);
+            }
+            renderCart();
+        }
+
+        // ─── RENDERIZAR CARRITO ───
+        function renderCart() {
+            const list = document.getElementById('lista-seleccionada');
+            const countBadge = document.getElementById('item-count');
+            const totalEl = document.getElementById('total-precio');
+
+            const totalQty = cart.reduce((sum, c) => sum + c.qty, 0);
+            const totalPrice = cart.reduce((sum, c) => sum + (c.precio * c.qty), 0);
+
+            countBadge.textContent = totalQty;
+            totalEl.textContent = '$' + totalPrice.toLocaleString();
+
+            if (cart.length === 0) {
+                list.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-8 text-gray-400">
+                        <svg class="w-10 h-10 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <p class="text-xs font-bold uppercase tracking-wider">Tu carrito está vacío</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = cart.map(item => `
+                <div class="cart-item flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100/50 backdrop-blur-sm">
+                        <img src="${item.img}" class="w-full h-full object-cover" alt="">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-black text-gray-900 truncate">${item.nombre}</p>
+                        <p class="text-[10px] text-gray-500 font-bold">$${item.precio} c/u</p>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button class="cart-qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+                        <span class="text-xs font-black text-gray-900 w-4 text-center">${item.qty}</span>
+                        <button class="cart-qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ─── VACIAR PEDIDO ───
+        function clearOrder() {
+            cart = [];
+            renderCart();
+        }
+
+        // ─── ENVIAR PEDIDO ───
+        function submitOrder() {
+            if (cart.length === 0) {
+                alert('Agrega productos al carrito primero');
+                return;
+            }
+            alert('¡Pedido enviado a cocina!');
+            clearOrder();
+        }
+
+        // ─── INICIALIZAR ───
+        renderMenu();
+        renderCart();
+
+        // Sincronizar nombre de mesa en el ticket
+        document.getElementById('mesa')?.addEventListener('change', function() {
+            const display = document.getElementById('mesa-display');
+            if (display) display.textContent = this.value;
+        });
+
+        // Mostrar pedidos activos en cocina
+        function updateQueueBadge() {
+            const orders = JSON.parse(localStorage.getItem('ff_orders') || '[]');
+            const badge  = document.getElementById('orders-in-queue');
+            const count  = document.getElementById('queue-count');
+            if (!badge) return;
+            if (orders.length > 0) {
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+                if (count) count.textContent = orders.length;
+            } else {
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+            }
+        }
+
+        updateQueueBadge();
+        setInterval(updateQueueBadge, 3000);
+
+        // Avatar del usuario
+        const session = localStorage.getItem('ff_session') || localStorage.getItem('usuario');
+        const avatarLetter = document.getElementById('user-avatar-letter');
+        if (session && avatarLetter) avatarLetter.textContent = session.charAt(0).toUpperCase();
+    </script>
+</body>
+</html>
