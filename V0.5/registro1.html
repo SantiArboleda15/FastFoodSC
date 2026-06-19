@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Fast Food</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       
+    </style>
+</head>
+<body class="bg-gray-50 h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white p-8 rounded-xl shadow-xl  w-full max-w-sm">
+        <h2 class="text-2xl font-black text-black mb-6 text-center uppercase tracking-tight">
+            Registro de Empleado
+        </h2>
+        
+        <form id="regForm" class="space-y-4">
+            <input type="text" id="nombre" placeholder="Nombre" class="input-style" required>
+            <input type="text" id="apellidos" placeholder="Apellidos" class="input-style" required>
+            <input type="tel" id="telefono" placeholder="Teléfono" class="input-style" required>
+            <input type="email" id="correo" placeholder="Correo electrónico" class="input-style" required>
+            
+            <button type="submit" class="btn-primary mt-4">
+                Guardar y Continuar
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('regForm').onsubmit = (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('nombre').value;
+            localStorage.setItem('usuario', nombre);
+            window.location.href = 'roles1.html';
+        };
+    </script>
+</body>
+</html>

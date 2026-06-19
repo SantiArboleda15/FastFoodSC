@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Seleccionar Rol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm text-center">
+        
+        <h2 class="text-2xl font-black text-black mb-8 uppercase tracking-tight">
+            Selecciona tu Perfil
+        </h2>
+
+        <div class="grid gap-4">
+            <a href="meseros1.html" 
+               class="text-BLACK font-bold py-4 rounded-lg uppercase transition-all ">
+               Mesero
+            </a>
+
+            <a href="cosina1.html" 
+               class=" text-black font-black py-4 rounded-lg uppercase  hover:text-BLACK transition-all">
+               Cocinero
+            </a>
+        </div>
+
+        <button onclick="localStorage.clear(); window.location.href='index.html'" 
+                class="text-[15px] text-gray-500 mt-10 underline uppercase hover:text-BLACK-400 transition-colors">
+            Cerrar Sesión
+        </button>
+        
+    </div>
+
+</body>
+</html>

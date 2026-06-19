@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenida - Fast Food</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       
+    </style>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+
+    <div class="max-w-md w-full px-6">
+        <h1 class="text-5xl font-black text-center text-black mb-2">FAST FOOD SERVICE</h1>
+        <p class="text-xs text-gray-400 text-center mb-12 uppercase tracking-widest">Plataforma Corporativa</p>
+        
+        <div class="grid gap-4">
+            <button onclick="verificarSesion()" class=" text-BLAKC font-bold py-4 rounded-lg uppercase">
+                Iniciar
+            </button>
+            
+            <a href="registro1.html" class="text-black font-black py-4 rounded-lg text-center uppercase hover:text-BLACK transition-all">
+                Registrarse
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function verificarSesion() {
+            const user = localStorage.getItem('usuario');
+            if (user) {
+                window.location.href = 'roles1.html';
+            } else {
+                alert("Primero debes registrarte.");
+            }
+        }
+    </script>
+</body>
+</html>

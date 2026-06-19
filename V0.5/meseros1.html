@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comanda Digital - Fast Food</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet">
+</head>
+<body class="ext-white min-h-screen p-4 flex flex-col items-center">
+
+    <header class="w-full max-w-4xl mb-4 bg-gray-800/50 p-4 rounded-xl border border-gray-700 backdrop-blur-md">
+        <div class="flex justify-between items-center">
+            <div>
+                <span class="font-black text-[10px] uppercase tracking-widest block">Operador Activo</span>
+                <span id="userName" class="text-lg font-bold text-white">Cargando...</span>
+            </div>
+            <a href="roles1.html" class=" text-BLACK-400 hover:bg-red-900/40 px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition-all border border-red-900/50">Cerrar Sesión</a>
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="md:col-span-2 space-y-4">
+            <div class="card ">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="font-black uppercase text-xl">Menú Principal</h2>
+                    <select id="mesa" class="border border-gray-700 text-BLACK text-xs rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-cyan-500">
+                        <option value="Mesa 1">Mesa 1</option>
+                        <option value="Mesa 2">Mesa 2</option>
+                        <option value="Mesa 3">Mesa 3</option>
+                        <option value="Mesa 4">Mesa 4</option>
+                        <option value="Barra">Para Llevar</option>
+                    </select>
+                </div>
+<div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                    
+                    <div>
+                        
+                    
+
+                <div id="contenedor-menu" class="space-y-6 max-h-[65vh] overflow-y-auto pr-2 custom-scrollbar">
+                    </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-1">
+            
+                <div class="flex justify-between items-center border-b border-gray-800 pb-2 mb-4">
+                    <h2 class="text-white font-black uppercase text-xs">Resumen de Cuenta</h2>
+                    <button onclick="limpiarPedido()" class="text-[9px]  hover:text-red-400 uppercase font-bold">Vaciar</button>
+                </div>
+                
+                <div id="lista-seleccionada" class="flex-grow overflow-y-auto space-y-2 mb-4 pr-1 text-xs italic text-gray-500">
+                    </div>
+
+                <div class="space-y-3">
+                    <textarea id="observaciones" placeholder="Notas: (Ej. Sin cebolla, término medio...)" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-2 text-[10px] text-white focus:ring-1 focus:ring-cyan-500 outline-none resize-none" rows="2"></textarea>
+                    
+                    <div class="border-t border-gray-800 pt-3">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-[10px] uppercase font-bold text-WHITE-400">Total a Pagar:</span>
+                            <span id="total-precio" class="text-2xl font-black text-BLACK-400">$0</span>
+                        </div>
+                        <button onclick="enviarPedido()" class="w-full  hover:bg-BLACK-500 text-BLACK font-black py-4 rounded-xl transition-all shadow-lg shadow-cyan-900/20 uppercase text-[11px] tracking-widest">
+                             Confirmar Pedido
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="registro.js"></script>
+</body>
+</html>
