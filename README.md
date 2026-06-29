@@ -250,32 +250,36 @@ FastFoodSC
 
 ## Inicio de Sesión
 
-![Login])<img width="1185" height="915" alt="image" src="https://github.com/user-attachments/assets/de6f1cb3-f953-45a9-b0e1-7d1bf93857fc" />
+<img width="1185" height="915" alt="image" src="https://github.com/user-attachments/assets/de6f1cb3-f953-45a9-b0e1-7d1bf93857fc" />
 
 
 ---
 
 ## Menú Principal
 
-![Menu](assets/menu.png)
+<img width="1248" height="839" alt="image" src="https://github.com/user-attachments/assets/37009302-1c68-425c-bc63-b34f46832b40" />
+
 
 ---
 
 ## Panel de Cocina
 
-![Cocina](assets/cocina.png)
+<img width="1231" height="802" alt="image" src="https://github.com/user-attachments/assets/5f8a09a8-2ba3-4701-9d38-bfb091b247bc" />
+
 
 ---
 
 ## Panel Administrativo
 
-![Administrador](assets/admin.png)
+<img width="1265" height="903" alt="image" src="https://github.com/user-attachments/assets/21b931ee-76f6-4b2f-ac4b-f4bc7d1fa1af" />
+
 
 ---
 
-## Estadísticas
+## Panel Registro
 
-![Estadísticas](assets/estadisticas.png)
+<img width="636" height="866" alt="image" src="https://github.com/user-attachments/assets/f7771e34-c2b6-4956-b7e4-d9e07c9609bb" />
+
 
 ---
 
