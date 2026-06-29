@@ -250,7 +250,8 @@ FastFoodSC
 
 ## Inicio de Sesión
 
-![Login](assets/login.png)
+![Login])<img width="1185" height="915" alt="image" src="https://github.com/user-attachments/assets/de6f1cb3-f953-45a9-b0e1-7d1bf93857fc" />
+
 
 ---
 
