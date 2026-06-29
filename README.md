@@ -1,4 +1,4 @@
-🍔 FastFoodSC
+FastFoodSC
 
 Sistema de Gestión Gastronómica para Restaurantes
 
