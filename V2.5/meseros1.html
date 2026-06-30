@@ -582,13 +582,48 @@
         }
 
         // ─── ENVIAR PEDIDO ───
-        function submitOrder() {
+        async function submitOrder() {
             if (cart.length === 0) {
                 alert('Agrega productos al carrito primero');
                 return;
             }
-            alert('¡Pedido enviado a cocina!');
-            clearOrder();
+
+            const btn = document.getElementById('btn-enviar');
+            if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+
+            const mesa = document.getElementById('mesa')?.value || 'General';
+            const num  = nextOrderNum();
+
+            const ticket = {
+                numero:    num,
+                mesa:      mesa,
+                mesero:    (localStorage.getItem('ff_session') || localStorage.getItem('usuario') || 'Anónimo'),
+                items:     cart,
+                notas:     '',
+                hora:      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                estado:    'pendiente',
+                timestamp: Date.now()
+            };
+
+            try {
+                const res  = await fetch('api.php?action=submit_order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(ticket)
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    alert(`¡Pedido #${num} enviado a cocina!`);
+                    clearOrder();
+                } else {
+                    alert(data.error || 'Error al enviar el pedido');
+                }
+            } catch (e) {
+                alert('Error de conexión con el servidor. Verifica que XAMPP esté activo.');
+            } finally {
+                if (btn) { btn.disabled = false; btn.textContent = '🚀 Confirmar Pedido'; }
+            }
         }
 
         // ─── INICIALIZAR ───
