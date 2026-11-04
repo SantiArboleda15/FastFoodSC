@@ -1,0 +1,2 @@
+# Las pruebas se ejecutan por CLI, no por HTTP.
+Require all denied

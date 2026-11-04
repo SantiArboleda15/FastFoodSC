@@ -1,0 +1,2 @@
+# El backend solo debe incluirse desde PHP, no abrirse por HTTP.
+Require all denied

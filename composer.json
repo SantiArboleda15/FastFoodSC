@@ -1,0 +1,26 @@
+{
+    "name": "fastfoodsc/fastfoodsc",
+    "description": "Sistema de gestión gastronómica para restaurantes de comida rápida",
+    "type": "project",
+    "license": "Apache-2.0",
+    "require": {
+        "php": ">=8.0",
+        "ext-json": "*",
+        "ext-pdo": "*"
+    },
+    "suggest": {
+        "ext-pdo_pgsql": "Necesaria para la futura integración con PostgreSQL"
+    },
+    "autoload": {
+        "psr-4": {
+            "FastFoodSC\\": "backend/"
+        },
+        "files": [
+            "backend/helpers/env.php"
+        ]
+    },
+    "scripts": {
+        "serve": "php -S localhost:8000 -t .",
+        "test": "php tests/smoke_test.php"
+    }
+}

@@ -1,0 +1,34 @@
+# Dependencias
+/vendor/
+/node_modules/
+
+# Entorno y credenciales locales
+.env
+.env.*
+!.env.example
+
+# Logs y archivos temporales
+*.log
+*.tmp
+*.cache
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Subidas locales
+/storage/uploads/*
+!/storage/uploads/.gitkeep
+
+# Sesiones y persistencia temporal del modo DEMO
+/storage/demo/sessions/*
+!/storage/demo/sessions/.gitkeep
+/storage/demo/*.json
+
+# Configuración de editores y sistema operativo
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de XAMPP / servidor local
+/php_error.log

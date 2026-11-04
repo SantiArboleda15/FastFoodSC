@@ -1,361 +1,352 @@
-FastFoodSC
+# FastFoodSC 3.0
 
-Sistema de Gestión Gastronómica para Restaurantes
-
-Sistema web desarrollado en **PHP, MySQL, HTML, CSS y JavaScript** para la administración de pedidos, empleados y cocina en restaurantes de comida rápida.
+Sistema de gestión gastronómica para restaurantes de comida rápida. Permite administrar empleados, tomar pedidos, monitorear la cocina y consultar estadísticas desde un panel administrativo.
 
 Proyecto desarrollado como evidencia del programa **Técnico en Programación de Software** del **Servicio Nacional de Aprendizaje (SENA)**.
 
----
+## Estado actual
 
-# Tabla de Contenidos
+Esta versión funciona en **modo DEMO**:
 
-- [Descripción](#-descripción)
-- [Características](#-características)
-- [Tecnologías](#-tecnologías-utilizadas)
-- [Arquitectura](#-arquitectura-del-sistema)
-- [Módulos](#-módulos-del-sistema)
-- [Instalación](#-instalación)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Capturas del Sistema](#-capturas-del-sistema)
-- [Pruebas](#-pruebas)
-- [Versiones](#-versiones-del-proyecto)
-- [Mejoras Futuras](#-mejoras-futuras)
-- [Autores](#-autores)
-- [Licencia](#-licencia)
+- No requiere MySQL, MariaDB, PostgreSQL ni XAMPP.
+- Los datos se guardan en la sesión PHP mediante `MockStorage`.
+- Los datos simulados se definen únicamente en `backend/Data/DemoData.php`.
+- La interfaz, las rutas y las funcionalidades se conservan.
+- La integración real con PostgreSQL queda preparada pero **todavía no está implementada**.
+
+La verificación de esta versión debe hacerse con PHP 8 instalado. El repositorio no incluye un servidor PHP embebido.
 
 ---
 
-# Descripción
+## Tecnologías
 
-**FastFoodSC** es un sistema de gestión gastronómica diseñado para optimizar el proceso de administración de restaurantes de comida rápida.
+| Tecnología | Uso |
+|---|---|
+| PHP 8 | Backend, API JSON y sesión DEMO |
+| HTML5 | Estructura del frontend |
+| CSS3 / Tailwind CSS | Estilos |
+| JavaScript | Interactividad y consumo de la API |
+| PostgreSQL + PDO_PGSQL | Persistencia futura |
+| pgAdmin 4 | Administración futura de PostgreSQL |
+| Git / GitHub | Control de versiones |
 
-La aplicación permite gestionar empleados, productos, pedidos y estados de preparación mediante una interfaz web intuitiva, facilitando el trabajo del personal administrativo, meseros y cocina.
-
-El proyecto fue desarrollado utilizando una arquitectura Cliente–Servidor con **PHP** para el backend, **MySQL** para la persistencia de datos y **HTML, CSS y JavaScript** para el frontend.
-
----
-
-# Características
-
-- Inicio de sesión de usuarios
-- Registro de empleados
-- Administración de productos
-- Gestión de pedidos
-- Panel de cocina
-- Panel administrativo
-- Estadísticas del sistema
-- Actualización del estado de pedidos
-- Base de datos MySQL
-- Arquitectura Cliente – Servidor
-- Diseño adaptable (Responsive)
+Tailwind CSS y las fuentes se cargan por CDN. Las imágenes del menú usan URLs externas de Unsplash.
 
 ---
 
-# Tecnologías Utilizadas
+## Funcionalidades
 
-| Tecnología | Función |
-|------------|---------|
-| PHP 8 | Backend |
-| MySQL | Base de Datos |
-| HTML5 | Estructura |
-| CSS3 | Diseño |
-| JavaScript | Interactividad |
-| XAMPP | Servidor Local |
-| Git | Control de Versiones |
-| GitHub | Repositorio |
-| Visual Studio Code | Editor de Código |
+- Inicio de sesión de empleados.
+- Registro de empleados.
+- Selección de rol: mesero, cocinero o administrador.
+- Comanda digital con carrito, observaciones y cálculo de total.
+- Envío de pedidos a la API.
+- Monitor de cocina con estados: pendiente, preparando, listo y despachado.
+- Panel administrativo con estadísticas, pedidos completados, pedidos activos y empleados.
+- Eliminación de empleados.
+- Limpieza de pedidos y reinicio del sistema.
+- Indicador visual de **MODO DEMO**.
+- Acción `demo_reset` para restaurar los datos simulados.
+
+La autenticación se conserva como en la versión base: contraseñas en texto plano y sesión del frontend en `localStorage`. No se modificó ese comportamiento porque está fuera del alcance actual.
 
 ---
 
-# Arquitectura del Sistema
+## Requisitos para el modo DEMO
 
-```
-                Usuario
+- PHP 8.0 o superior.
+- Extensiones PHP básicas: `json`, `session` y `pdo` (PDO no se usa en modo DEMO, pero queda declarado).
+- Navegador actualizado.
+- Opcional: Composer, solo para generar el autoload de herramientas futuras.
+- Opcional: Node.js, solo para validar la sintaxis de los archivos JavaScript.
 
-                   │
+No se necesita MySQL, MariaDB, PostgreSQL, Apache ni XAMPP.
 
-                   ▼
+### Instalar PHP 8 en Windows
 
-      HTML • CSS • JavaScript
+1. Descargar PHP 8 para Windows desde `https://windows.php.net/download/`.
+2. Descomprimir en una ruta sin espacios, por ejemplo `C:\php`.
+3. Agregar `C:\php` a la variable de entorno `Path`.
+4. Abrir una terminal nueva y verificar:
 
-                   │
-
-                   ▼
-
-             API desarrollada
-                 en PHP
-
-                   │
-
-                   ▼
-
-                MySQL
+```powershell
+php -v
 ```
 
-El sistema utiliza una arquitectura Cliente-Servidor donde el frontend interactúa con una API desarrollada en PHP, la cual procesa la lógica del negocio y almacena la información en una base de datos MySQL.
+Si el comando no responde, revisar la variable `Path` o ejecutar PHP con su ruta completa.
 
 ---
 
-# Módulos del Sistema
+## Ejecutar la aplicación
 
-## Autenticación
+Desde la raíz del proyecto:
 
-- Inicio de sesión
-- Registro de usuarios
-- Validación de credenciales
-
----
-
-## Gestión de Productos
-
-- Crear productos
-- Editar productos
-- Eliminar productos
-- Consultar productos
-
----
-
-## Gestión de Pedidos
-
-- Crear pedidos
-- Agregar productos
-- Calcular total
-- Enviar pedidos a cocina
-
----
-
-## Cocina
-
-- Visualizar pedidos pendientes
-- Cambiar estado de preparación
-- Marcar pedidos como listos
-
----
-
-## Administración
-
-- Gestión de empleados
-- Estadísticas
-- Eliminación de usuarios
-- Reinicio de pedidos
-
----
-
-# Instalación
-
-## 1️⃣ Clonar el repositorio
-
-```bash
-git clone https://github.com/SantiArboleda15/FastFoodSC.git
+```powershell
+php -S localhost:8000 -t .
 ```
 
----
-
-## 2️⃣ Abrir XAMPP
-
-Iniciar los servicios:
-
-- Apache
-- MySQL
-
----
-
-## 3️⃣ Copiar el proyecto
-
-Mover la carpeta del proyecto hacia:
-
-```
-C:\xampp\htdocs\
-```
-
----
-
-## 4️⃣ Crear la Base de Datos
-
-Ingresar a:
-
-```
-http://localhost/phpmyadmin
-```
-
-Crear una base de datos e importar el archivo SQL correspondiente a la versión del proyecto que se desea ejecutar.
-
----
-
-## 5️⃣ Configurar la conexión
-
-Editar el archivo:
-
-```
-db.php
-```
-
-o
-
-```
-conexion.php
-```
-
-Configurando:
-
-- Servidor
-- Usuario
-- Contraseña
-- Nombre de la Base de Datos
-
----
-
-## 6️⃣ Ejecutar el proyecto
-
-Abrir el navegador e ingresar:
-
-```
-http://localhost/FastFoodSC
-```
-
----
-
-# Estructura del Proyecto
+Abrir en el navegador:
 
 ```text
-FastFoodSC
-│
-├── assets/
-│   ├── banner.png
-│   ├── login.png
-│   ├── menu.png
-│   ├── cocina.png
-│   ├── admin.png
-│   └── estadisticas.png
-│
-├── docs/
-│   ├── Manual_Tecnico.pdf
-│   ├── Manual_Usuario.pdf
-│   ├── Manual_Instalacion.pdf
-│   └── Manual_Pruebas.pdf
-│
-├── V0.5/
-├── V1.5/
-├── V2.0/
-├── V2.5/
-│
-├── README.md
-└── LICENSE
+http://localhost:8000/
 ```
 
----
+El archivo raíz `index.php` redirige a `frontend/` y `frontend/index.php` redirige al login.
 
-# Capturas del Sistema
+También se puede abrir directamente:
 
-## Inicio de Sesión
+```text
+http://localhost:8000/frontend/pages/index.html
+```
 
-<img width="1185" height="915" alt="image" src="https://github.com/user-attachments/assets/de6f1cb3-f953-45a9-b0e1-7d1bf93857fc" />
+El servidor embebido de PHP es solo para desarrollo local. No debe exponerse a una red pública.
 
+### Credenciales DEMO
 
----
-
-## Menú Principal
-
-<img width="1248" height="839" alt="image" src="https://github.com/user-attachments/assets/37009302-1c68-425c-bc63-b34f46832b40" />
-
-
----
-
-## Panel de Cocina
-
-<img width="1231" height="802" alt="image" src="https://github.com/user-attachments/assets/5f8a09a8-2ba3-4701-9d38-bfb091b247bc" />
-
+| Usuario | Contraseña | Rol |
+|---|---|---|
+| `fastfood` | `1234` | Administrador |
+| `maria` | `1234` | Mesero |
+| `carlos` | `1234` | Cocinero |
+| `laura` | `1234` | Mesero |
 
 ---
 
-## Panel Administrativo
+## Configuración
 
-<img width="1265" height="903" alt="image" src="https://github.com/user-attachments/assets/21b931ee-76f6-4b2f-ac4b-f4bc7d1fa1af" />
+Copiar `.env.example` como `.env` si se necesita cambiar el modo o los parámetros:
 
+```powershell
+Copy-Item .env.example .env
+```
 
----
+Contenido esperado para el modo DEMO:
 
-## Panel Registro
+```env
+APP_ENV=local
+APP_DEBUG=true
+STORAGE_DRIVER=demo
+```
 
-<img width="636" height="866" alt="image" src="https://github.com/user-attachments/assets/f7771e34-c2b6-4956-b7e4-d9e07c9609bb" />
+El archivo `.env` está excluido por `.gitignore`. Si no existe, la aplicación usa `STORAGE_DRIVER=demo` por defecto.
 
+### Modos de almacenamiento
 
----
+| `STORAGE_DRIVER` | Implementación | Estado |
+|---|---|---|
+| `demo`, `mock`, `session` | `MockStorage` | Disponible |
+| `pgsql`, `postgres`, `postgresql` | `PostgreSQLStorage` | Pendiente, lanza una excepción controlada |
 
-# Pruebas
+En modo DEMO, las variables `DB_*` de PostgreSQL se ignoran.
 
-El proyecto cuenta con documentación técnica para validar el correcto funcionamiento del sistema mediante casos de prueba que incluyen:
+### Datos DEMO
 
-- Inicio de sesión
-- Registro de usuarios
-- Gestión de pedidos
-- Gestión de empleados
-- Actualización de estados
-- Estadísticas
-- Reinicio del sistema
+- 4 usuarios.
+- 12 productos.
+- 4 categorías.
+- 3 roles.
+- 7 mesas o puntos de entrega.
+- 4 estados de pedido.
+- 5 pedidos iniciales con 10 ítems.
 
----
+Los cambios viven en la sesión PHP. Para restaurar los datos iniciales:
 
-# Versiones del Proyecto
+- Usar el botón **Reiniciar Todo el Sistema** del panel admin.
+- O llamar a `frontend/api.php?action=demo_reset`.
+- O eliminar la sesión del navegador.
 
-| Versión | Descripción |
-|----------|-------------|
-| **V0.5** | Primera versión utilizando almacenamiento local (LocalStorage). |
-| **V1.5** | Implementación del backend en PHP y conexión con MySQL. |
-| **V2.0** | Integración del panel administrativo y mejoras en la gestión de datos. |
-| **V2.5** | Optimización del sistema, normalización de la base de datos y mejoras generales. |
-
----
-
-# Mejoras Futuras
-
-- Implementar autenticación mediante JWT.
-- Incorporar recuperación de contraseña.
-- Generar reportes en PDF.
-- Dashboard con gráficos estadísticos.
-- Notificaciones en tiempo real.
-- Implementar Docker.
-- Despliegue en un servidor en la nube.
-- Integración con pasarelas de pago.
+Las sesiones se guardan en `storage/demo/sessions/`, excluida de Git.
 
 ---
 
-# Documentación
+## Estructura del proyecto
 
-El proyecto incluye la siguiente documentación:
+```text
+FastFoodSC/
+├── frontend/
+│   ├── assets/
+│   │   ├── css/style.css
+│   │   ├── fonts/
+│   │   ├── img/image_414dac.png
+│   │   └── js/
+│   │       ├── registro.js
+│   │       └── theme-editor.js
+│   ├── components/
+│   ├── pages/
+│   │   ├── index.html
+│   │   ├── registro1.html
+│   │   ├── roles1.html
+│   │   ├── meseros1.html
+│   │   ├── cosina1.html
+│   │   └── admin.html
+│   ├── api.php
+│   └── index.php
+│
+├── backend/
+│   ├── Contracts/StorageInterface.php
+│   ├── Data/DemoData.php
+│   ├── Repositories/
+│   ├── Services/
+│   ├── Storage/
+│   │   ├── MockStorage.php
+│   │   ├── PostgreSQLStorage.php
+│   │   └── StorageFactory.php
+│   ├── Support/
+│   ├── config/database.php
+│   ├── controllers/
+│   ├── helpers/env.php
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/api.php
+│   └── bootstrap.php
+│
+├── database/
+│   ├── legacy/mysql/          # SQL histórico, no usado por la aplicación
+│   └── postgresql/            # Reservado para migraciones futuras
+│
+├── storage/
+│   ├── demo/sessions/
+│   ├── logs/
+│   └── uploads/
+│
+├── docs/
+│   ├── INVENTARIO.md
+│   └── legacy/
+│
+├── tests/
+│   ├── README.md
+│   └── smoke_test.php
+│
+├── .env.example
+├── .gitignore
+├── .htaccess
+├── composer.json
+├── index.php
+├── LICENSE
+└── README.md
+```
 
-- Manual Técnico
-- Manual de Usuario
-- Manual de Instalación
-- Manual de Pruebas Unitarias
+### Responsabilidades
+
+- `frontend/`: páginas y recursos estáticos.
+- `frontend/api.php`: punto de entrada HTTP que delega en el backend.
+- `backend/bootstrap.php`: autoload, carga de `.env`, sesión y fábrica de almacenamiento.
+- `backend/Contracts/`: contrato común de almacenamiento.
+- `backend/Data/`: fuente única de datos simulados.
+- `backend/Storage/`: implementaciones DEMO y futura PostgreSQL.
+- `backend/Repositories/`: acceso a usuarios, productos, catálogos y pedidos.
+- `backend/Services/`: autenticación, usuarios, catálogos, pedidos, administración y sistema.
+- `backend/Support/`: utilidades de petición, respuesta y excepciones.
+- `backend/routes/api.php`: enrutador de la API JSON.
+- `database/legacy/mysql/`: scripts MySQL de la versión 2.5, solo referencia.
+- `database/postgresql/`: espacio reservado para el futuro esquema PostgreSQL.
+- `storage/`: sesiones DEMO, logs y subidas locales.
+- `tests/`: verificación automática y plan de pruebas manuales.
 
 ---
 
-# Autores
+## API
 
-**Elver Santiago Arboleda Vargas**
+Todas las peticiones se realizan a `frontend/api.php` con el parámetro `action`.
 
-Desarrollador 
+| Acción | Método | Función |
+|---|---|---|
+| `login` | POST | Validar usuario y contraseña |
+| `register` | POST | Registrar empleado |
+| `get_users` | GET | Listar empleados sin contraseñas |
+| `delete_user` | POST | Eliminar un empleado por nombre |
+| `get_products` | GET | Listar productos DEMO |
+| `get_catalogs` | GET | Listar roles, categorías, mesas y estados |
+| `get_orders` | GET | Listar pedidos con filtros |
+| `submit_order` | POST | Crear un pedido |
+| `update_status` | POST | Cambiar el estado de un pedido |
+| `get_stats` | GET | Obtener estadísticas del panel admin |
+| `clear_orders` | POST | Borrar todos los pedidos |
+| `clear_all` | POST | Borrar pedidos y empleados no administradores |
+| `get_system_info` | GET | Consultar versión, modo y persistencia |
+| `demo_reset` | POST | Restaurar los datos DEMO iniciales |
+
+### Filtros de `get_orders`
+
+- `estado`: `pendiente`, `preparando`, `listo`, `despachado` o `activos`.
+- `mesa`: nombre exacto de la mesa.
+- `mesero`: nombre exacto del mesero.
+- `q`: búsqueda por número, mesa, mesero, notas o producto.
+- `desde` y `hasta`: marcas de tiempo en milisegundos.
+- `limit`: cantidad máxima de resultados.
+
+Ejemplos:
+
+```text
+frontend/api.php?action=get_orders&estado=activos
+frontend/api.php?action=get_orders&mesa=Mesa%201&q=pollo
+frontend/api.php?action=get_system_info
+```
+
+Las respuestas incluyen las cabeceras `X-FastFoodSC-Mode` y `X-FastFoodSC-Demo`.
 
 ---
 
-**Jhon Deivid Romero Bohórquez**
+## Pruebas
 
-Desarrollador 
+### Verificación automática
+
+Con PHP instalado:
+
+```powershell
+php tests/smoke_test.php
+```
+
+La prueba valida la estructura principal, el modo DEMO, los catálogos, las estadísticas, la creación y actualización de pedidos y el rechazo controlado de `PostgreSQLStorage`.
+
+### Validación de JavaScript
+
+Con Node.js instalado:
+
+```powershell
+node --check frontend/assets/js/registro.js
+node --check frontend/assets/js/theme-editor.js
+```
+
+### Flujo manual
+
+1. Iniciar el servidor con `php -S localhost:8000 -t .`.
+2. Abrir `http://localhost:8000/`.
+3. Iniciar sesión con `fastfood` / `1234`.
+4. Registrar un empleado y comprobar que aparece en el panel admin.
+5. Crear un pedido desde el panel de mesero.
+6. Verificar que aparece en cocina.
+7. Avanzar el estado: pendiente → preparando → listo → despachado.
+8. Comprobar estadísticas y tablas del panel administrativo.
+9. Cerrar sesión y verificar la redirección al login.
+10. Reiniciar el sistema y confirmar que vuelven los datos DEMO.
+
+El plan detallado está en `tests/README.md`.
 
 ---
 
-**Alan Rafael Orellano Rodelo**
+## MySQL legado y PostgreSQL futuro
 
-Desarrollador 
+Los scripts MySQL de la versión 2.5 se movieron a `database/legacy/mysql/` y no son usados por la aplicación. No es necesario importarlos para probar el modo DEMO.
+
+La base tecnológica futura es PostgreSQL. Para esa etapa falta:
+
+1. Definir el esquema y las migraciones en `database/postgresql/migrations/`.
+2. Crear las semillas en `database/postgresql/seeds/`.
+3. Implementar `backend/Storage/PostgreSQLStorage.php` con PDO_PGSQL.
+4. Habilitar la extensión `pdo_pgsql`.
+5. Configurar `STORAGE_DRIVER=pgsql` y las variables `DB_*`.
+6. Probar conexión, transacciones y consultas antes de retirar `MockStorage`.
+
+Mientras `PostgreSQLStorage` no esté implementado, `STORAGE_DRIVER=pgsql` produce un error controlado. El modo seguro es `STORAGE_DRIVER=demo`.
 
 ---
 
-# Licencia
+## Seguridad y alcance
 
-Este proyecto se distribuye bajo la licencia **Apache 2.0**.
-
----
-
-**FastFoodSC © 2026**
+- El modo DEMO no es un entorno de producción.
+- Las contraseñas siguen almacenadas en texto plano, igual que en la versión base.
+- La sesión del frontend usa `localStorage`.
+- El servidor embebido de PHP no debe usarse en producción.
+- Los archivos `.htaccess` bloquean el acceso directo a `.env`, `backend/`, `database/`, `storage/` y `tests/` cuando se usa Apache.
+- No se eliminó ni reescribió el historial de Git.

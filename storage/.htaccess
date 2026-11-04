@@ -1,0 +1,2 @@
+# Evitar el acceso web directo a logs y subidas.
+Require all denied

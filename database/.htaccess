@@ -1,0 +1,2 @@
+# Evitar la descarga directa de scripts SQL.
+Require all denied
