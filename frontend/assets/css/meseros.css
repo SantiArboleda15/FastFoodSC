@@ -1,0 +1,204 @@
+/* --------------------------------------------------------------
+   FastFoodSC – Panel de meseros (modo DEMO)
+   Colores: navy petróleo #081f26, naranja #f97316
+   -------------------------------------------------------------- */
+:root {
+  --navy-900: #081f26;
+  --navy-800: #0b2b33;
+  --navy-700: #103a45;
+  --accent: #f97316;
+  --accent-soft: #fff1e7;
+  --surface: #f8fafc;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+}
+
+/* --- Reset básico ------------------------------------------------ */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--surface);
+}
+
+/* --- Header (carga vía .kfc-hero) ------------------------------ */
+.kfc-hero {
+  background: var(--navy-900) !important;
+  color: #fff;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Título y nombre del mesero dentro del hero */
+.kfc-hero h2,
+.kfc-hero p {
+  color: #fff !important;
+}
+.kfc-hero .font-bold,
+.kfc-hero .text-navy-400 {
+  color: var(--navy-900) !important;
+}
+
+/* Badge de pedidos en cola (posición absoluta dentro del header) */
+.badge-queue {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* --- Contenedor principal ---------------------------------------- */
+.main {}
+
+/* --- Menú de productos ------------------------------------------ */
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .menu-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .menu-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Tarjeta de producto */
+.product-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.product-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+.product-info {
+  padding: 0.75rem;
+}
+.product-name {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+.product-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+.product-price {
+  margin-top: 0.5rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Botón "Agregar" sobre la tarjeta */
+.add-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+.add-btn:hover { background: var(--accent-soft); }
+
+/* --- Categorías (pills) ---------------------------------------- */
+.categories {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.cat-pill {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.cat-pill:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.cat-pill.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* --- Panel lateral del pedido (fijo a la derecha) ------------- */
+.order-panel {
+  position: fixed;
+  right: 0;
+  top: 80px;
+  bottom: 0;
+  width: 260px;
+  background: #fff;
+  border-left: 1px solid var(--border);
+  padding: 1rem;
+  overflow-y: auto;
+}
+.order-panel .mb-2 { margin-bottom: 0.5rem; }
+.order-panel .font-bold { font-weight: 700; }
+.order-panel .text-accent { color: var(--accent); }
+.order-panel .total {
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-top: 1rem;
+}
+
+/* --- Botón Confirmar -------------------------------------------- */
+.btn-confirm {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.btn-confirm:hover { background: var(--accent-soft); }
+
+/* --- Responsivity ----------------------------------------------- */
+@media (max-width: 1024px) {
+  .order-panel { display: none; }
+}
+@media (max-width: 768px) {
+  .menu-grid { grid-template-columns: 1fr; }
+  .order-panel {
+    position: static;
+    width: 100%;
+    border-left: none;
+    padding-bottom: 1rem;
+  }
+}
+@media (max-width: 480px) {
+  .product-img { height: 100px; }
+}

@@ -11,6 +11,30 @@ namespace FastFoodSC\Data;
  */
 final class DemoData
 {
+    /**
+     * Hash bcrypt de la contraseña de demostración del administrador.
+     * La contraseña en claro solo se documenta en docs/CREDENCIALES_DEMO.md.
+     */
+    public const ADMIN_DEMO_PASSWORD_HASH = '$2y$12$XlgqnBgLWdCc8ADjkOSci.lhk.jzdlw.nrMG7xw85nJzL2In04Ze.';
+
+    /** Hash bcrypt de la contraseña histórica de los usuarios DEMO (1234). */
+    public const LEGACY_PASSWORD_HASH = '$2y$12$eHcHxJwVro9uE2Jp7AE1vO2ab.00oV03hMB4qre263yLAmgrdsX3W';
+
+    public static function adminDemoUser(): array
+    {
+        return [
+            'id' => 5,
+            'nombre' => 'admin',
+            'apellidos' => 'Demo',
+            'telefono' => '3000000001',
+            'correo' => 'admin.demo@fastfood.com',
+            'password' => self::ADMIN_DEMO_PASSWORD_HASH,
+            'rol' => 'administrador',
+            'activo' => true,
+            'fechaRegistro' => date('Y-m-d H:i:s'),
+        ];
+    }
+
     public static function make(): array
     {
         $now    = time();
@@ -20,12 +44,12 @@ final class DemoData
 
         return [
             'meta' => [
-                'seed_version' => '3.0-demo',
+                'seed_version' => '3.1-demo',
                 'generated_at' => $iso(0),
             ],
 
             'next_ids' => [
-                'user'       => 5,
+                'user'       => 6,
                 'product'    => 13,
                 'order'      => 6,
                 'order_item' => 11,
@@ -62,14 +86,16 @@ final class DemoData
             ],
 
             'users' => [
+                array_merge(self::adminDemoUser(), ['fechaRegistro' => $iso(-86400 * 30)]),
                 [
                     'id' => 1,
                     'nombre' => 'fastfood',
                     'apellidos' => 'Admin',
                     'telefono' => '3000000000',
                     'correo' => 'admin@fastfood.com',
-                    'password' => '1234',
+                    'password' => self::LEGACY_PASSWORD_HASH,
                     'rol' => 'administrador',
+                    'activo' => true,
                     'fechaRegistro' => $iso(-86400 * 30),
                 ],
                 [
@@ -78,8 +104,9 @@ final class DemoData
                     'apellidos' => 'Gómez',
                     'telefono' => '3001112233',
                     'correo' => 'maria@fastfood.com',
-                    'password' => '1234',
+                    'password' => self::LEGACY_PASSWORD_HASH,
                     'rol' => 'mesero',
+                    'activo' => true,
                     'fechaRegistro' => $iso(-86400 * 12),
                 ],
                 [
@@ -88,8 +115,9 @@ final class DemoData
                     'apellidos' => 'Pérez',
                     'telefono' => '3004445566',
                     'correo' => 'carlos@fastfood.com',
-                    'password' => '1234',
+                    'password' => self::LEGACY_PASSWORD_HASH,
                     'rol' => 'cocinero',
+                    'activo' => true,
                     'fechaRegistro' => $iso(-86400 * 8),
                 ],
                 [
@@ -98,8 +126,9 @@ final class DemoData
                     'apellidos' => 'Rodríguez',
                     'telefono' => '3007778899',
                     'correo' => 'laura@fastfood.com',
-                    'password' => '1234',
+                    'password' => self::LEGACY_PASSWORD_HASH,
                     'rol' => 'mesero',
+                    'activo' => true,
                     'fechaRegistro' => $iso(-86400 * 3),
                 ],
             ],
