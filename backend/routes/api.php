@@ -47,6 +47,20 @@ $systemService = new SystemService($storage);
 
 $action = (string) ($_GET['action'] ?? '');
 
+$requireAdmin = static function () use ($authService): array {
+    $user = $authService->currentUser();
+
+    if ($user === null) {
+        Response::error('Debes iniciar sesión para realizar esta acción.', 401);
+    }
+
+    if (($user['rol'] ?? '') !== 'administrador') {
+        Response::error('No tienes permisos para acceder al panel administrativo.', 403);
+    }
+
+    return $user;
+};
+
 try {
     switch ($action) {
         case 'login':
@@ -57,12 +71,31 @@ try {
             Response::json($authService->register(Request::json()));
             break;
 
+        case 'me':
+            $user = $authService->currentUser();
+            Response::json($user === null
+                ? ['success' => false, 'autenticado' => false]
+                : array_merge(['success' => true, 'autenticado' => true], $user));
+            break;
+
+        case 'logout':
+            Response::json($authService->logout());
+            break;
+
         case 'get_users':
+            $requireAdmin();
             Response::json($userService->all());
             break;
 
         case 'delete_user':
-            Response::json($userService->delete(Request::json()));
+            $admin = $requireAdmin();
+            $payload = Request::json();
+
+            if (strcasecmp((string) ($payload['nombre'] ?? ''), (string) ($admin['nombre'] ?? '')) === 0) {
+                Response::error('No puedes eliminar tu propia cuenta.', 400);
+            }
+
+            Response::json($userService->delete($payload));
             break;
 
         case 'get_products':
@@ -86,7 +119,28 @@ try {
             break;
 
         case 'submit_order':
-            Response::json($orderService->create(Request::json()));
+            // --- Validación de identidad desde sesión PHP ---
+            $user = $authService->currentUser();
+            if ($user === null) {
+                Response::error('Debes iniciar sesión para realizar esta acción.', 401);
+            }
+            if (($user['activo'] ?? true) !== true) {
+                Response::error('Tu cuenta está inactiva.', 403);
+            }
+            $allowedRoles = ['mesero', 'administrador'];
+            if (!in_array($user['rol'] ?? '', $allowedRoles, true)) {
+                Response::error('No tienes permisos para realizar esta acción.', 403);
+            }
+
+            // --- Sobrescribir identidad del mesero venga donde venga del frontend ---
+            $body = Request::json();
+            if (is_array($body)) {
+                $body['mesero'] = $user['nombre'] ?? 'desconocido';
+                // Opcional: también se puede grabar el ID del usuario
+                $body['usuario_id'] = $user['id'] ?? null;
+            }
+
+            Response::json($orderService->create($body));
             break;
 
         case 'update_status':
@@ -98,10 +152,12 @@ try {
             break;
 
         case 'clear_orders':
+            $requireAdmin();
             Response::json($adminService->clearOrders());
             break;
 
         case 'clear_all':
+            $requireAdmin();
             Response::json($adminService->clearAll());
             break;
 
@@ -110,6 +166,7 @@ try {
             break;
 
         case 'demo_reset':
+            $requireAdmin();
             Response::json($adminService->resetDemo());
             break;
 

@@ -27,11 +27,12 @@ final class MockStorage implements StorageInterface
 
         if (isset($_SESSION[self::SESSION_KEY]) && is_array($_SESSION[self::SESSION_KEY])) {
             $this->state = $_SESSION[self::SESSION_KEY];
+            $this->normalizeState();
             return;
         }
 
         $this->state = DemoData::make();
-        $this->persist();
+        $this->normalizeState();
     }
 
     public function mode(): string
@@ -81,10 +82,17 @@ final class MockStorage implements StorageInterface
     public function userFindByCredentials(string $nombre, string $password): ?array
     {
         foreach ($this->state['users'] as $user) {
-            if (
-                strcasecmp((string) $user['nombre'], $nombre) === 0
-                && (string) $user['password'] === $password
-            ) {
+            if (strcasecmp((string) $user['nombre'], $nombre) !== 0) {
+                continue;
+            }
+
+            if (($user['activo'] ?? true) !== true) {
+                return null;
+            }
+
+            $hash = (string) ($user['password'] ?? '');
+
+            if ($hash !== '' && password_verify($password, $hash)) {
                 return $user;
             }
         }
@@ -104,14 +112,21 @@ final class MockStorage implements StorageInterface
         $id = (int) ($this->state['next_ids']['user'] ?? 1);
         $this->state['next_ids']['user'] = $id + 1;
 
+        $password = (string) ($user['password'] ?? '');
+
+        if ($password !== '' && !$this->isPasswordHash($password)) {
+            $password = password_hash($password, PASSWORD_DEFAULT);
+        }
+
         $record = [
             'id' => $id,
             'nombre' => $nombre,
             'apellidos' => trim((string) ($user['apellidos'] ?? '')),
             'telefono' => trim((string) ($user['telefono'] ?? '')),
             'correo' => $correo,
-            'password' => (string) ($user['password'] ?? ''),
+            'password' => $password,
             'rol' => (string) ($user['rol'] ?? 'mesero'),
+            'activo' => (bool) ($user['activo'] ?? true),
             'fechaRegistro' => (string) ($user['fechaRegistro'] ?? date('Y-m-d H:i:s')),
         ];
 
@@ -347,6 +362,61 @@ final class MockStorage implements StorageInterface
         $order['total'] = array_sum(array_column($items, 'subtotal'));
 
         return $order;
+    }
+
+    /**
+     * Migra sesiones DEMO antiguas sin duplicar usuarios:
+     * - Convierte contraseñas en texto plano a hash bcrypt.
+     * - Garantiza el campo "activo".
+     * - Agrega el administrador DEMO una sola vez si todavía no existe.
+     */
+    private function normalizeState(): void
+    {
+        if (!isset($this->state['users']) || !is_array($this->state['users'])) {
+            $this->state['users'] = [];
+        }
+
+        if (!isset($this->state['next_ids']) || !is_array($this->state['next_ids'])) {
+            $this->state['next_ids'] = [];
+        }
+
+        $maxId = 0;
+        $adminExists = false;
+
+        foreach ($this->state['users'] as $index => $user) {
+            $maxId = max($maxId, (int) ($user['id'] ?? 0));
+
+            $password = (string) ($user['password'] ?? '');
+
+            if ($password !== '' && !$this->isPasswordHash($password)) {
+                $this->state['users'][$index]['password'] = password_hash($password, PASSWORD_DEFAULT);
+            }
+
+            if (!array_key_exists('activo', $user)) {
+                $this->state['users'][$index]['activo'] = true;
+            }
+
+            if (strcasecmp((string) ($user['nombre'] ?? ''), 'admin') === 0) {
+                $adminExists = true;
+            }
+        }
+
+        if (!$adminExists) {
+            $admin = DemoData::adminDemoUser();
+            $admin['id'] = $maxId + 1;
+            $this->state['users'][] = $admin;
+            $maxId = (int) $admin['id'];
+        }
+
+        $nextUserId = (int) ($this->state['next_ids']['user'] ?? 1);
+        $this->state['next_ids']['user'] = max($nextUserId, $maxId + 1);
+
+        $this->persist();
+    }
+
+    private function isPasswordHash(string $password): bool
+    {
+        return password_get_info($password)['algo'] !== null;
     }
 
     private function persist(): void

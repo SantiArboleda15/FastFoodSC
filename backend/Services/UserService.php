@@ -25,6 +25,10 @@ final class UserService
             throw new ValidationException('El nombre del empleado es obligatorio.');
         }
 
+        if (strcasecmp($nombre, 'admin') === 0) {
+            throw new ValidationException('El administrador DEMO no puede eliminarse.');
+        }
+
         $this->users->deleteByName($nombre);
 
         return ['success' => true, 'nombre' => $nombre];

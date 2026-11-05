@@ -8,307 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        /* ─── ESTILOS ADICIONALES KFC-STYLE CON AZUL + GLASS ─── */
-        .kfc-hero {
-            background: rgba(255,255,255,0.25);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.5);
-            border-radius: 1.5rem;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4);
-        }
-
-        .kfc-card {
-            background: rgba(255,255,255,0.35);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.55);
-            border-radius: 1.25rem;
-            overflow: hidden;
-            transition: all 0.35s cubic-bezier(0.34,1.1,0.64,1);
-            box-shadow: 0 4px 24px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.3);
-            position: relative;
-        }
-
-        .kfc-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 16px 48px rgba(6,182,212,0.12), inset 0 1px 0 rgba(255,255,255,0.5);
-            border-color: rgba(6,182,212,0.3);
-        }
-
-        .kfc-card .card-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .kfc-card:hover .card-img {
-            transform: scale(1.1);
-        }
-
-        .kfc-card .card-body {
-            padding: 1rem 1.25rem 1.25rem;
-        }
-
-        .kfc-card .card-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
-            letter-spacing: 0.02em;
-            color: #111827;
-            line-height: 1.1;
-        }
-
-        .kfc-card .card-desc {
-            font-size: 0.75rem;
-            color: #6b7280;
-            margin-top: 0.25rem;
-            line-height: 1.4;
-        }
-
-        .kfc-card .card-price {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.85rem;
-            color: #0891b2;
-            letter-spacing: 0.02em;
-        }
-
-        .kfc-card .add-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(8,145,178,0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            font-weight: 900;
-            border: 1px solid rgba(255,255,255,0.4);
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 16px rgba(8,145,178,0.25), inset 0 1px 0 rgba(255,255,255,0.3);
-            flex-shrink: 0;
-        }
-
-        .kfc-card .add-btn:hover {
-            transform: scale(1.15);
-            background: rgba(6,182,212,0.95);
-            box-shadow: 0 8px 24px rgba(6,182,212,0.35), inset 0 1px 0 rgba(255,255,255,0.4);
-        }
-
-        .kfc-card .add-btn:active {
-            transform: scale(0.92);
-        }
-
-        /* ─── CARRITO LATERAL GLASS AZUL ─── */
-        .cart-panel {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.45);
-            border-radius: 1.5rem;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.3);
-            position: sticky;
-            top: 80px;
-            overflow: hidden;
-        }
-
-        .cart-header {
-            background: rgba(8,145,178,0.25);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            color: #0e7490;
-            padding: 1rem 1.25rem;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .cart-header::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -15%;
-            width: 140px;
-            height: 140px;
-            background: rgba(6,182,212,0.15);
-            border-radius: 50%;
-            filter: blur(20px);
-        }
-
-        .cart-header::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -10%;
-            width: 100px;
-            height: 100px;
-            background: rgba(103,232,249,0.2);
-            border-radius: 50%;
-            filter: blur(15px);
-        }
-
-        .cart-header h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 0.05em;
-            position: relative;
-            z-index: 1;
-            color: #0e7490;
-        }
-
-        .cart-item {
-            background: rgba(255,255,255,0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 0.875rem;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border: 1px solid rgba(255,255,255,0.4);
-            transition: all 0.25s ease;
-        }
-
-        .cart-item:hover {
-            background: rgba(255,255,255,0.65);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .cart-qty-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid rgba(8,145,178,0.3);
-            background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(4px);
-            color: #0891b2;
-            font-weight: 900;
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
-        }
-
-        .cart-qty-btn:hover {
-            background: rgba(8,145,178,0.85);
-            color: white;
-            border-color: rgba(8,145,178,0.5);
-            box-shadow: 0 2px 8px rgba(8,145,178,0.2);
-        }
-
-        .cart-total-bar {
-            background: rgba(17,24,39,0.15);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            color: #111827;
-            padding: 1rem 1.25rem;
-            border-radius: 0 0 1.5rem 1.5rem;
-            border-top: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .cart-total-bar .total-price {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            color: #0891b2;
-        }
-
-        .btn-confirm {
-            background: rgba(8,145,178,0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            color: white;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
-            letter-spacing: 0.08em;
-            padding: 0.875rem;
-            border-radius: 1rem;
-            border: 1px solid rgba(255,255,255,0.4);
-            width: 100%;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 20px rgba(8,145,178,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
-            text-transform: uppercase;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-confirm::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-confirm:hover::before {
-            left: 100%;
-        }
-
-        .btn-confirm:hover {
-            background: rgba(6,182,212,0.9);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(6,182,212,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
-        }
-
-        .btn-confirm:active {
-            transform: translateY(0);
-        }
-
-        /* ─── CATEGORÍAS GLASS AZUL ─── */
-        .cat-pill {
-            padding: 0.5rem 1.25rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            border: 1px solid rgba(255,255,255,0.4);
-            background: rgba(255,255,255,0.3);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: #4b5563;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            white-space: nowrap;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
-        }
-
-        .cat-pill:hover {
-            background: rgba(8,145,178,0.2);
-            color: #0891b2;
-            border-color: rgba(8,145,178,0.3);
-        }
-
-        .cat-pill.active {
-            background: rgba(8,145,178,0.75);
-            backdrop-filter: blur(12px);
-            color: white;
-            border-color: rgba(8,145,178,0.5);
-            box-shadow: 0 4px 16px rgba(8,145,178,0.25), inset 0 1px 0 rgba(255,255,255,0.3);
-        }
-
-        /* ─── SCROLLBAR CARRITO ─── */
-        .cart-scroll::-webkit-scrollbar { width: 4px; }
-        .cart-scroll::-webkit-scrollbar-track { background: transparent; }
-        .cart-scroll::-webkit-scrollbar-thumb { background: rgba(8,145,178,0.3); border-radius: 10px; }
-
-        /* ─── RESPONSIVE ─── */
-        @media (max-width: 768px) {
-            .kfc-card .card-img { height: 150px; }
-            .kfc-card .card-title { font-size: 1.35rem; }
-            .cart-panel { position: fixed; bottom: 0; left: 0; right: 0; top: auto; border-radius: 1.5rem 1.5rem 0 0; z-index: 50; max-height: 70vh; }
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/meseros.css?v=2">
 </head>
 <body class="text-white min-h-screen flex flex-col">
 
@@ -316,12 +16,11 @@
     <header class="w-full bg-gray-900/80 backdrop-blur-md border-b border-gray-800 px-4 py-3 sticky top-0 z-40">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-cyan-600 flex items-center justify-center
-                            text-white text-sm font-black flex-shrink-0" id="user-avatar-letter">
+                <div class="w-9 h-9 rounded-xl bg-navy-900 flex items-center justify-center text-white text-sm font-black flex-shrink-0" id="user-avatar-letter">
                     M
                 </div>
                 <div>
-                    <p class="text-cyan-400 font-bold text-[9px] uppercase tracking-widest leading-none">
+                    <p class="text-navy-400 font-bold text-[9px] uppercase tracking-widest leading-none">
                         Mesero Activo
                     </p>
                     <p id="userName" class="text-white font-black text-sm leading-tight mt-0.5">
@@ -332,8 +31,7 @@
 
             <div class="flex items-center gap-2">
                 <!-- Pedidos en cola (badge) -->
-                <div id="orders-in-queue" class="hidden items-center gap-1.5 bg-amber-500/10 border
-                     border-amber-500/30 text-amber-400 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase">
+                <div id="orders-in-queue" class="hidden items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase">
                     <span class="animate-pulse">●</span>
                     <span id="queue-count">0</span> en cocina
                 </div>
@@ -355,10 +53,11 @@
             <!-- Hero / Filtros + Mesa -->
             <div class="kfc-hero flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="font-black uppercase text-2xl tracking-tight text-gray-900" style="font-family:'Bebas Neue',sans-serif;letter-spacing:0.03em;">
+                    <h2 class="font-black uppercase text-2xl tracking-tight text-navy-900"
+                          style="font-family:'Inter',sans-serif;letter-spacing:0.03em;">
                         🍗 Nuestro Menú
                     </h2>
-                    <p class="text-gray-500 text-xs font-semibold mt-0.5">Selecciona tus favoritos</p>
+                    <p class="text-navy-500 text-xs font-semibold mt-0.5">Selecciona tus favoritos</p>
                 </div>
                 <div class="flex items-center gap-3">
                     <!-- Categorías scroll horizontal -->
@@ -370,8 +69,8 @@
                         <button class="cat-pill" onclick="filterCat('extra',this)">Extras</button>
                     </div>
                     <select id="mesa"
-                        class="bg-white/70 border border-gray-300/60 text-gray-900 text-xs rounded-xl
-                               px-3 py-2.5 outline-none focus:ring-2 focus:ring-cyan-500 font-bold backdrop-blur-sm">
+                            class="bg-white/70 border border-gray-300/60 text-gray-900 text-xs rounded-xl
+                                   px-3 py-2.5 outline-none focus:ring-2 focus:ring-navy-500 font-bold backdrop-blur-sm">
                         <option value="Mesa 1">🪑 Mesa 1</option>
                         <option value="Mesa 2">🪑 Mesa 2</option>
                         <option value="Mesa 3">🪑 Mesa 3</option>
@@ -383,7 +82,7 @@
                 </div>
             </div>
 
-            <!-- Grid de Menú KFC-Style -->
+            <!-- Grid de Menú -->
             <div id="contenedor-menu"
                  class="grid grid-cols-1 sm:grid-cols-2 gap-4"
                  style="max-height: calc(100vh - 220px); overflow-y: auto; padding-right: 4px;">
@@ -400,11 +99,11 @@
                 <div class="cart-header flex justify-between items-center">
                     <div>
                         <h2>🛒 TU PEDIDO</h2>
-                        <p id="mesa-display" class="text-cyan-700 text-[10px] font-bold mt-0.5 uppercase tracking-wider">Mesa 1</p>
+                        <p id="mesa-display" class="text-navy-400 text-[10px] font-bold mt-0.5 uppercase tracking-wider">Mesa 1</p>
                     </div>
                     <span id="item-count"
-                          class="w-8 h-8 bg-cyan-500/30 rounded-full text-cyan-800 text-xs font-black
-                                 flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-cyan-400/30">
+                          class="w-8 h-8 bg-amber-500/30 rounded-full text-amber-400 text-xs font-black
+                                   flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-amber-400/30">
                         0
                     </span>
                 </div>
@@ -420,7 +119,7 @@
                     <textarea id="observaciones"
                         placeholder="📝 Notas: sin cebolla, término medio..."
                         class="w-full bg-white/50 border border-gray-300/50 rounded-xl p-2.5 text-xs
-                               text-gray-900 focus:ring-2 focus:ring-cyan-500 outline-none resize-none
+                               text-navy-900 focus:ring-2 focus:ring-navy-500 outline-none resize-none
                                placeholder-gray-400 backdrop-blur-sm"
                         rows="2">
                     </textarea>
@@ -429,18 +128,18 @@
                 <!-- Total + Botón -->
                 <div class="cart-total-bar">
                     <div class="flex justify-between items-baseline mb-3">
-                        <span class="text-xs text-gray-600 uppercase font-black tracking-wider">Total</span>
+                        <span class="text-xs text-navy-600 uppercase font-black tracking-wider">Total</span>
                         <span id="total-precio" class="total-price">
                             $0
                         </span>
                     </div>
                     <button id="btn-enviar" onclick="submitOrder()"
-                        class="btn-confirm">
+                            class="btn-primary w-full mt-2">
                         🚀 Confirmar Pedido
                     </button>
-                    <button onclick="clearOrder()"
-                        class="w-full mt-2 text-[10px] text-gray-500 hover:text-gray-800 uppercase font-black
-                               transition-colors py-1">
+                    <button onclick="clearOrder()
+                                class="w-full mt-2 text-[10px] text-navy-500 hover:text-navy-700 uppercase font-black
+                                       transition-colors py-1">
                         Vaciar Pedido
                     </button>
                 </div>
@@ -460,7 +159,7 @@
         async function loadProducts() {
             const container = document.getElementById('contenedor-menu');
             if (container) {
-                container.innerHTML = '<p class="text-gray-500 text-sm text-center py-8">Cargando productos DEMO...</p>';
+                container.innerHTML = '<p class="text-navy-500 text-sm text-center py-8">Cargando productos DEMO...</p>';
             }
 
             try {
@@ -553,7 +252,7 @@
 
             if (cart.length === 0) {
                 list.innerHTML = `
-                    <div class="flex flex-col items-center justify-center py-8 text-gray-400">
+                    <div class="flex flex-col items-center justify-center py-8 text-navy-400">
                         <svg class="w-10 h-10 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
@@ -569,12 +268,12 @@
                         <img src="${item.imagen}" class="w-full h-full object-cover" alt="">
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-xs font-black text-gray-900 truncate">${item.nombre}</p>
-                        <p class="text-[10px] text-gray-500 font-bold">$${item.precio} c/u</p>
+                        <p class="text-xs font-black text-navy-900 truncate">${item.nombre}</p>
+                        <p class="text-[10px] text-navy-500 font-bold">$${item.precio} c/u</p>
                     </div>
                     <div class="flex items-center gap-1.5">
                         <button class="cart-qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
-                        <span class="text-xs font-black text-gray-900 w-4 text-center">${item.qty}</span>
+                        <span class="text-xs font-black text-navy-900 w-4 text-center">${item.qty}</span>
                         <button class="cart-qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
                     </div>
                 </div>
@@ -589,6 +288,14 @@
 
         // ─── ENVIAR PEDIDO ───
         async function submitOrder() {
+            // --- Verificar que haya una sesión PHP activa ---
+            const session = localStorage.getItem('ff_session');
+            if (!session) {
+                alert('Sesión expirada. Por favor, vuelve a iniciar sesión.');
+                window.location.href = 'index.html';
+                return;
+            }
+
             if (cart.length === 0) {
                 alert('Agrega productos al carrito primero');
                 return;
@@ -599,9 +306,10 @@
 
             const mesa = document.getElementById('mesa')?.value || 'General';
 
+            // No se envía el campo mesero desde el frontend; el backend
+            // lo asignará usando la sesión PHP autenticada.
             const ticket = {
-                mesa:      mesa,
-                mesero:    (localStorage.getItem('ff_session') || localStorage.getItem('usuario') || 'Anónimo'),
+                mesa,
                 items:     cart,
                 notas:     document.getElementById('observaciones')?.value.trim() || '',
                 hora:      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),

@@ -8,6 +8,8 @@ use FastFoodSC\Support\ValidationException;
 
 final class AuthService
 {
+    private const SESSION_KEY = 'fastfoodsc_auth';
+
     public function __construct(private UserRepository $users)
     {
     }
@@ -23,15 +25,20 @@ final class AuthService
 
         $user = $this->users->findByCredentials($nombre, $password);
 
-        if ($user === null) {
+        if ($user === null || ($user['activo'] ?? true) !== true) {
             return ['success' => false, 'error' => 'Usuario o contraseña incorrectos'];
         }
 
-        return [
-            'success' => true,
+        $sessionUser = [
+            'id' => (int) ($user['id'] ?? 0),
             'nombre' => (string) $user['nombre'],
             'rol' => (string) ($user['rol'] ?? 'mesero'),
+            'loginAt' => date('c'),
         ];
+
+        $this->writeSession($sessionUser);
+
+        return array_merge(['success' => true], $sessionUser);
     }
 
     public function register(array $input): array
@@ -41,6 +48,7 @@ final class AuthService
         $telefono = trim((string) ($input['telefono'] ?? ''));
         $correo = trim((string) ($input['correo'] ?? ''));
         $password = (string) ($input['password'] ?? '');
+        $rol = strtolower(trim((string) ($input['rol'] ?? 'mesero')));
 
         if ($nombre === '' || $apellidos === '' || $telefono === '' || $correo === '' || $password === '') {
             throw new ValidationException('Todos los campos son obligatorios.');
@@ -54,6 +62,10 @@ final class AuthService
             throw new ValidationException('La contraseña debe tener al menos 4 caracteres.');
         }
 
+        if (!in_array($rol, ['mesero', 'cocinero'], true)) {
+            throw new ValidationException('El rol solicitado no está permitido en el registro público.');
+        }
+
         if ($this->users->findByName($nombre) !== null || $this->users->findByEmail($correo) !== null) {
             throw new ValidationException('El nombre de usuario o correo ya está registrado.');
         }
@@ -64,13 +76,58 @@ final class AuthService
             'telefono' => $telefono,
             'correo' => $correo,
             'password' => $password,
-            'rol' => (string) ($input['rol'] ?? 'mesero'),
+            'rol' => $rol,
+            'activo' => true,
         ]);
 
-        return [
-            'success' => true,
+        $sessionUser = [
+            'id' => (int) ($user['id'] ?? 0),
             'nombre' => (string) $user['nombre'],
-            'rol' => (string) ($user['rol'] ?? 'mesero'),
+            'rol' => (string) ($user['rol'] ?? $rol),
+            'loginAt' => date('c'),
         ];
+
+        $this->writeSession($sessionUser);
+
+        return array_merge(['success' => true], $sessionUser);
+    }
+
+    public function currentUser(): ?array
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+
+        $user = $_SESSION[self::SESSION_KEY] ?? null;
+
+        return is_array($user) ? $user : null;
+    }
+
+    public function logout(): array
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+
+        unset($_SESSION[self::SESSION_KEY]);
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            @session_regenerate_id(true);
+        }
+
+        return ['success' => true, 'mensaje' => 'Sesión cerrada correctamente.'];
+    }
+
+    private function writeSession(array $user): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            @session_regenerate_id(true);
+        }
+
+        $_SESSION[self::SESSION_KEY] = $user;
     }
 }

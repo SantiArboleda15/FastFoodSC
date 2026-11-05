@@ -49,13 +49,34 @@ function formatCOP(n) {
 // SESIÓN
 // ─────────────────────────────────────────
 function getSession()  { return localStorage.getItem('ff_session'); }
+function getSessionRole() { return localStorage.getItem('ff_role') || ''; }
+function saveSession(user) {
+    const nombre = typeof user === 'string' ? user : String(user.nombre || '');
+    const rol = typeof user === 'string' ? '' : String(user.rol || '');
+
+    localStorage.setItem('ff_session', nombre);
+    localStorage.setItem('ff_role', rol);
+
+    if (typeof user !== 'string' && user.id !== undefined) {
+        localStorage.setItem('ff_user_id', String(user.id));
+    }
+}
+function clearSession() {
+    localStorage.removeItem('ff_session');
+    localStorage.removeItem('ff_role');
+    localStorage.removeItem('ff_user_id');
+    localStorage.removeItem('usuario');
+}
 function requireAuth() {
     if (!getSession()) { window.location.href = 'index.html'; return false; }
     return true;
 }
 function logout() {
-    localStorage.removeItem('ff_session');
-    window.location.href = 'index.html';
+    clearSession();
+
+    fetch('../api.php?action=logout', { method: 'POST' })
+        .catch(() => null)
+        .finally(() => { window.location.href = 'index.html'; });
 }
 
 // ─────────────────────────────────────────
@@ -444,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
 
                 if (data.success) {
-                    localStorage.setItem('ff_session', data.nombre);
+                    saveSession(data);
                     showToast(`¡Bienvenido, ${data.nombre}! 👋`, 'success');
                     setTimeout(() => window.location.href = 'roles1.html', 900);
                 } else {
@@ -490,7 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
 
                 if (data.success) {
-                    localStorage.setItem('ff_session', data.nombre || nombre);
+                    saveSession(data);
                     showToast(`¡Bienvenido al equipo, ${nombre}! 🎉`, 'success');
                     setTimeout(() => window.location.href = 'roles1.html', 900);
                 } else {

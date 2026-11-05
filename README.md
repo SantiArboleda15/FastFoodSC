@@ -36,19 +36,23 @@ Tailwind CSS y las fuentes se cargan por CDN. Las imágenes del menú usan URLs 
 
 ## Funcionalidades
 
-- Inicio de sesión de empleados.
+- Inicio de sesión de empleados con contraseñas almacenadas mediante hash bcrypt.
 - Registro de empleados.
 - Selección de rol: mesero, cocinero o administrador.
 - Comanda digital con carrito, observaciones y cálculo de total.
 - Envío de pedidos a la API.
 - Monitor de cocina con estados: pendiente, preparando, listo y despachado.
-- Panel administrativo con estadísticas, pedidos completados, pedidos activos y empleados.
-- Eliminación de empleados.
+- Panel administrativo rediseñado con dashboard, pedidos, productos, categorías, mesas, usuarios, reportes y configuración.
+- Eliminación protegida de empleados.
 - Limpieza de pedidos y reinicio del sistema.
 - Indicador visual de **MODO DEMO**.
 - Acción `demo_reset` para restaurar los datos simulados.
+- Sesión autenticada en PHP y cierre de sesión coordinado con el frontend.
 
-La autenticación se conserva como en la versión base: contraseñas en texto plano y sesión del frontend en `localStorage`. No se modificó ese comportamiento porque está fuera del alcance actual.
+La API administrativa valida la sesión PHP y el rol `administrador` antes de
+listar usuarios, eliminarlos o ejecutar acciones destructivas. El frontend
+mantiene una referencia de sesión en `localStorage` para la navegación, pero
+el panel administrativo exige una sesión PHP válida.
 
 ---
 
@@ -105,10 +109,15 @@ El servidor embebido de PHP es solo para desarrollo local. No debe exponerse a u
 
 | Usuario | Contraseña | Rol |
 |---|---|---|
+| `admin` | `AdminDemo2026!` | Administrador |
 | `fastfood` | `1234` | Administrador |
 | `maria` | `1234` | Mesero |
 | `carlos` | `1234` | Cocinero |
 | `laura` | `1234` | Mesero |
+
+La cuenta recomendada para el panel administrativo es `admin`. Las
+credenciales completas están en `docs/CREDENCIALES_DEMO.md`, un archivo para
+desarrollo local que no debe usarse en producción.
 
 ---
 
@@ -141,7 +150,7 @@ En modo DEMO, las variables `DB_*` de PostgreSQL se ignoran.
 
 ### Datos DEMO
 
-- 4 usuarios.
+- 5 usuarios (incluye el administrador DEMO `admin`).
 - 12 productos.
 - 4 categorías.
 - 3 roles.
@@ -166,10 +175,12 @@ FastFoodSC/
 ├── frontend/
 │   ├── assets/
 │   │   ├── css/style.css
+│   │   ├── css/admin.css
 │   │   ├── fonts/
 │   │   ├── img/image_414dac.png
 │   │   └── js/
 │   │       ├── registro.js
+│   │       ├── admin.js
 │   │       └── theme-editor.js
 │   ├── components/
 │   ├── pages/
@@ -210,6 +221,7 @@ FastFoodSC/
 │   └── uploads/
 │
 ├── docs/
+│   ├── CREDENCIALES_DEMO.md
 │   ├── INVENTARIO.md
 │   └── legacy/
 │
@@ -251,10 +263,12 @@ Todas las peticiones se realizan a `frontend/api.php` con el parámetro `action`
 
 | Acción | Método | Función |
 |---|---|---|
-| `login` | POST | Validar usuario y contraseña |
-| `register` | POST | Registrar empleado |
-| `get_users` | GET | Listar empleados sin contraseñas |
-| `delete_user` | POST | Eliminar un empleado por nombre |
+| `login` | POST | Validar usuario y contraseña e iniciar sesión PHP |
+| `register` | POST | Registrar empleado e iniciar sesión PHP |
+| `me` | GET | Consultar el usuario autenticado en la sesión PHP |
+| `logout` | POST | Cerrar la sesión PHP |
+| `get_users` | GET | Listar empleados sin contraseñas (solo administrador) |
+| `delete_user` | POST | Eliminar un empleado por nombre (solo administrador) |
 | `get_products` | GET | Listar productos DEMO |
 | `get_catalogs` | GET | Listar roles, categorías, mesas y estados |
 | `get_orders` | GET | Listar pedidos con filtros |
@@ -264,7 +278,11 @@ Todas las peticiones se realizan a `frontend/api.php` con el parámetro `action`
 | `clear_orders` | POST | Borrar todos los pedidos |
 | `clear_all` | POST | Borrar pedidos y empleados no administradores |
 | `get_system_info` | GET | Consultar versión, modo y persistencia |
-| `demo_reset` | POST | Restaurar los datos DEMO iniciales |
+| `demo_reset` | POST | Restaurar los datos DEMO iniciales (solo administrador) |
+
+Las acciones `get_users`, `delete_user`, `clear_orders`, `clear_all` y
+`demo_reset` requieren una sesión PHP con rol `administrador`. Sin sesión
+responden `401`; con un rol distinto responden `403`.
 
 ### Filtros de `get_orders`
 
@@ -305,6 +323,7 @@ Con Node.js instalado:
 
 ```powershell
 node --check frontend/assets/js/registro.js
+node --check frontend/assets/js/admin.js
 node --check frontend/assets/js/theme-editor.js
 ```
 
@@ -312,14 +331,16 @@ node --check frontend/assets/js/theme-editor.js
 
 1. Iniciar el servidor con `php -S localhost:8000 -t .`.
 2. Abrir `http://localhost:8000/`.
-3. Iniciar sesión con `fastfood` / `1234`.
-4. Registrar un empleado y comprobar que aparece en el panel admin.
-5. Crear un pedido desde el panel de mesero.
-6. Verificar que aparece en cocina.
-7. Avanzar el estado: pendiente → preparando → listo → despachado.
-8. Comprobar estadísticas y tablas del panel administrativo.
-9. Cerrar sesión y verificar la redirección al login.
-10. Reiniciar el sistema y confirmar que vuelven los datos DEMO.
+3. Iniciar sesión con `admin` / `AdminDemo2026!`.
+4. Verificar que se abre el panel administrativo y que el dashboard carga datos.
+5. Registrar un empleado desde el flujo de registro y comprobar que aparece en Usuarios.
+6. Crear un pedido desde el panel de mesero.
+7. Verificar que aparece en cocina.
+8. Avanzar el estado: pendiente → preparando → listo → despachado.
+9. Comprobar estadísticas, reportes y tablas del panel administrativo.
+10. Cerrar sesión y verificar la redirección al login.
+11. Confirmar que una cuenta con rol mesero recibe `403` al llamar `get_users`.
+12. Reiniciar el sistema y confirmar que vuelven los datos DEMO.
 
 El plan detallado está en `tests/README.md`.
 
@@ -345,8 +366,10 @@ Mientras `PostgreSQLStorage` no esté implementado, `STORAGE_DRIVER=pgsql` produ
 ## Seguridad y alcance
 
 - El modo DEMO no es un entorno de producción.
-- Las contraseñas siguen almacenadas en texto plano, igual que en la versión base.
-- La sesión del frontend usa `localStorage`.
+- Las contraseñas DEMO se almacenan como hash bcrypt y se verifican con `password_verify()`.
+- La sesión autenticada vive en PHP; el frontend conserva una referencia en `localStorage`.
+- El panel administrativo valida sesión y rol antes de mostrar datos o ejecutar acciones.
+- Las credenciales de demostración están documentadas solo para desarrollo local.
 - El servidor embebido de PHP no debe usarse en producción.
 - Los archivos `.htaccess` bloquean el acceso directo a `.env`, `backend/`, `database/`, `storage/` y `tests/` cuando se usa Apache.
 - No se eliminó ni reescribió el historial de Git.
