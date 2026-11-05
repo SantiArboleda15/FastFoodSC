@@ -3,214 +3,505 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin — Fast Food Service</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Panel Administrativo — FastFoodSC</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
-<body class="text-slate-200 p-4 md:p-6 pb-16 bg-slate-900 min-h-screen">
+<body>
 
-    <!-- ─── HEADER ─── -->
-    <header class="max-w-7xl mx-auto mb-6">
-        <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-2xl p-4 md:p-5">
-            <div class="flex flex-wrap justify-between items-center gap-4">
+    <!-- Pantalla de verificación de sesión -->
+    <div class="gate" id="authGate">
+        <div class="gate-card">
+            <div class="gate-spinner"></div>
+            <h1>Verificando sesión</h1>
+            <p id="gateMessage">Comprobando permisos de administrador…</p>
+        </div>
+    </div>
 
-                <div class="flex items-center gap-4">
+    <div class="admin-shell" id="adminApp" hidden>
+        <aside class="sidebar" id="sidebar" aria-label="Menú administrativo">
+            <div class="sidebar-brand">
+                <div class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 10h16M5 10l1.2 8.4A2 2 0 0 0 8.2 20h7.6a2 2 0 0 0 2-1.6L19 10M7 10V7a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3"/>
+                        <path d="M8 14h.01M12 14h.01M16 14h.01"/>
+                    </svg>
+                </div>
+                <div class="brand-copy">
+                    <strong>FastFoodSC</strong>
+                    <span>Restaurant Suite</span>
+                </div>
+                <button class="icon-btn sidebar-collapse" id="sidebarCollapse" type="button"
+                        aria-label="Contraer menú" title="Contraer menú">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="nav-label">Operación</p>
+                <button class="nav-item active" data-section="dashboard" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-section="pedidos" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+                    <span>Pedidos</span>
+                    <span class="nav-badge" id="navOrdersBadge">0</span>
+                </button>
+                <button class="nav-item" data-section="productos" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7l-8-4-8 4 8 4 8-4z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg>
+                    <span>Productos</span>
+                </button>
+                <button class="nav-item" data-section="categorias" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v5H4zM13 14h7v5h-7z"/></svg>
+                    <span>Categorías</span>
+                </button>
+                <button class="nav-item" data-section="mesas" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10h16M6 10v9M18 10v9M8 10V6a4 4 0 0 1 8 0v4"/></svg>
+                    <span>Mesas</span>
+                </button>
+                <button class="nav-item" data-section="usuarios" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 4.5a3.2 3.2 0 0 1 0 6.2M17.5 14.2A5.5 5.5 0 0 1 20.5 20"/></svg>
+                    <span>Usuarios</span>
+                </button>
+                <button class="nav-item" data-section="reportes" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg>
+                    <span>Reportes</span>
+                </button>
+
+                <p class="nav-label">Sistema</p>
+                <button class="nav-item" data-section="configuracion" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+                    <span>Configuración</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="demo-note">
+                    <span class="demo-dot"></span>
                     <div>
-                        <p class="text-violet-400 text-[9px] font-black uppercase tracking-[0.3em] mb-0.5">
-                            Administración
-                        </p>
-                        <h1 class="text-4xl font-black text-white uppercase leading-none"
-                            style="font-family:'Bebas Neue',sans-serif; letter-spacing:0.04em;">
-                            Panel Admin
-                        </h1>
+                        <strong>MODO DEMO</strong>
+                        <span>Datos simulados en sesión PHP</span>
                     </div>
                 </div>
-
-                <div class="flex items-center gap-3">
-                    <span class="text-[10px] text-slate-500">
-                        Sesión: <span id="adm-username" class="text-white font-bold">—</span>
-                    </span>
-                    <!-- Botón Volver a Roles (misma ventana) -->
-                    <a href="roles1.html"
-                       class="bg-slate-700 hover:bg-violet-900/40 hover:text-violet-400 text-slate-300
-                              px-4 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all
-                              border border-slate-600 flex items-center gap-2">
-                        ← Volver a Roles
-                    </a>
-                    <button onclick="logout()"
-                        class="bg-red-900/30 hover:bg-red-800/40 text-red-400 border border-red-900/40
-                               px-4 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all
-                               flex items-center gap-2">
-                        ✕ Cerrar Sesión
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- ─── STAT CARDS ─── -->
-    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-
-        <div class="stat-card" style="--stat-accent:#06b6d4;">
-            <p class="stat-value" id="adm-completed">—</p>
-            <p class="stat-label">Pedidos<br>Completados</p>
-            <span class="text-2xl mt-2 block opacity-30">✅</span>
-        </div>
-
-        <div class="stat-card" style="--stat-accent:#f59e0b;">
-            <p class="stat-value" id="adm-active">—</p>
-            <p class="stat-label">Pedidos<br>Activos</p>
-            <span class="text-2xl mt-2 block opacity-30">⏳</span>
-        </div>
-
-        <div class="stat-card" style="--stat-accent:#10b981;">
-            <p class="stat-value text-emerald-400 text-2xl" id="adm-revenue">$0</p>
-            <p class="stat-label">Ingresos<br>Totales</p>
-            <span class="text-2xl mt-2 block opacity-30">💰</span>
-        </div>
-
-        <div class="stat-card" style="--stat-accent:#8b5cf6;">
-            <p class="stat-value text-violet-400 text-2xl" id="adm-avg">$0</p>
-            <p class="stat-label">Promedio<br>por Pedido</p>
-            <span class="text-2xl mt-2 block opacity-30">📊</span>
-        </div>
-
-        <div class="stat-card" style="--stat-accent:#f43f5e;">
-            <p class="stat-value" id="adm-employees">—</p>
-            <p class="stat-label">Empleados<br>Registrados</p>
-            <span class="text-2xl mt-2 block opacity-30">👥</span>
-        </div>
-
-    </div>
-
-    <!-- ─── DOS TABLAS ─── -->
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-
-        <!-- Tabla: Pedidos Completados -->
-        <div class="card">
-            <div class="flex justify-between items-center mb-5">
-                <div>
-                    <h2 class="text-white font-black uppercase text-sm tracking-wider">Pedidos Completados</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Últimos 25 despachados</p>
-                </div>
-                <span class="text-xs text-cyan-400 font-bold bg-cyan-400/10 border border-cyan-400/20
-                             px-2 py-1 rounded-lg" id="adm-completed-badge">0</span>
-            </div>
-            <div class="overflow-x-auto" style="max-height: 360px; overflow-y: auto;">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Mesa</th>
-                            <th>Mesero</th>
-                            <th>Ítems</th>
-                            <th>Total</th>
-                            <th>Hora</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adm-orders-tbody">
-                        <tr>
-                            <td colspan="6" class="text-center py-10 text-slate-500 text-sm">
-                                Cargando...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Tabla: Empleados -->
-        <div class="card">
-            <div class="flex justify-between items-center mb-5">
-                <div>
-                    <h2 class="text-white font-black uppercase text-sm tracking-wider">Empleados Registrados</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Personal del sistema</p>
-                </div>
-                <span class="text-xs text-violet-400 font-bold bg-violet-400/10 border border-violet-400/20
-                             px-2 py-1 rounded-lg" id="adm-employees-badge">0</span>
-            </div>
-            <div class="overflow-x-auto" style="max-height: 360px; overflow-y: auto;">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Empleado</th>
-                            <th>Teléfono</th>
-                            <th>Registro</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adm-emp-tbody">
-                        <tr>
-                            <td colspan="4" class="text-center py-10 text-slate-500 text-sm">
-                                Cargando...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ─── PEDIDOS ACTIVOS ─── -->
-    <div class="max-w-7xl mx-auto card mb-6">
-        <div class="flex justify-between items-center mb-5">
-            <div>
-                <h2 class="text-white font-black uppercase text-sm tracking-wider">Pedidos Activos en Cocina</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Estado en tiempo real</p>
-            </div>
-            <span id="adm-active-badge"
-                  class="text-xs text-amber-400 font-bold bg-amber-400/10 border border-amber-400/20
-                         px-2 py-1 rounded-lg">0</span>
-        </div>
-        <div id="adm-active-orders" class="text-center py-8 text-slate-500 text-sm">
-            Sin pedidos activos
-        </div>
-    </div>
-
-    <!-- ─── ZONA PELIGROSA ─── -->
-    <div class="max-w-7xl mx-auto">
-        <div class="border border-red-900/40 rounded-2xl p-5 bg-red-950/10">
-            <h3 class="text-red-400 font-black uppercase text-xs tracking-widest mb-2">⚠️ Zona Peligrosa</h3>
-            <p class="text-slate-500 text-xs mb-4">
-                Estas acciones son irreversibles. Úsalas solo para reiniciar el sistema en demostraciones.
-            </p>
-            <div class="flex flex-wrap gap-3">
-                <button onclick="clearOrders()"
-                    class="bg-red-900/30 hover:bg-red-800/40 text-red-400 border border-red-900/40
-                           px-4 py-2 rounded-xl text-xs font-black uppercase transition-all">
-                    Limpiar Pedidos
-                </button>
-                <button onclick="clearAllData()"
-                    class="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-xl
-                           text-xs font-black uppercase transition-all">
-                    Reiniciar Todo el Sistema
+                <button class="nav-item nav-logout" id="sidebarLogout" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l5-5-5-5M15 12H3"/></svg>
+                    <span>Cerrar sesión</span>
                 </button>
             </div>
+        </aside>
+
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <div class="main-area">
+            <header class="topbar">
+                <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button"
+                        aria-label="Abrir menú">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                </button>
+
+                <div class="page-heading">
+                    <span class="eyebrow">Administración</span>
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+
+                <div class="topbar-actions">
+                    <form class="search-box" id="globalSearchForm" role="search">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                        <input id="globalSearchInput" type="search" placeholder="Buscar pedido, mesa o producto…" aria-label="Buscar">
+                    </form>
+
+                    <div class="action-wrap">
+                        <button class="icon-btn notification-btn" id="notificationsBtn" type="button"
+                                aria-label="Notificaciones" title="Notificaciones">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+                            <span class="notification-dot" id="notificationDot" hidden></span>
+                        </button>
+                        <div class="dropdown notification-panel" id="notificationPanel" hidden>
+                            <div class="dropdown-head">
+                                <strong>Pedidos en curso</strong>
+                                <span id="notificationCount">0</span>
+                            </div>
+                            <div id="notificationList" class="notification-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="action-wrap">
+                        <button class="profile-btn" id="profileBtn" type="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="avatar" id="profileAvatar">A</span>
+                            <span class="profile-copy">
+                                <strong id="profileName">Administrador</strong>
+                                <span id="profileRole">administrador</span>
+                            </span>
+                            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="dropdown profile-menu" id="profileMenu" hidden>
+                            <div class="profile-menu-head">
+                                <span class="avatar" id="profileMenuAvatar">A</span>
+                                <div>
+                                    <strong id="profileMenuName">Administrador</strong>
+                                    <span id="profileMenuRole">Rol: administrador</span>
+                                </div>
+                            </div>
+                            <button type="button" id="profileLogout">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l5-5-5-5M15 12H3"/></svg>
+                                Cerrar sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content">
+                <!-- DASHBOARD -->
+                <section class="admin-section" id="section-dashboard" data-title="Dashboard">
+                    <div class="section-head">
+                        <div>
+                            <h2>Resumen general</h2>
+                            <p>Visión operativa del restaurante en tiempo real.</p>
+                        </div>
+                        <span class="demo-pill"><span></span> MODO DEMO · datos simulados</span>
+                    </div>
+
+                    <div class="stats-grid" id="dashStats" aria-live="polite"></div>
+
+                    <div class="dashboard-grid">
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h3>Resumen de ventas</h3>
+                                    <p>Pedidos despachados por día</p>
+                                </div>
+                                <span class="panel-tag" id="salesChartTotal">$0</span>
+                            </div>
+                            <div id="salesChart" class="chart-area"></div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h3>Distribución de pedidos</h3>
+                                    <p>Estado actual de la operación</p>
+                                </div>
+                            </div>
+                            <div id="statusChart" class="status-chart"></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid two">
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h3>Actividad reciente</h3>
+                                    <p>Últimos pedidos registrados</p>
+                                </div>
+                                <button class="text-btn" type="button" data-go="pedidos">Ver todos</button>
+                            </div>
+                            <div class="table-wrap">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Pedido</th>
+                                            <th>Mesa</th>
+                                            <th>Mesero</th>
+                                            <th>Total</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dashRecentOrders"></tbody>
+                                </table>
+                            </div>
+                            <div class="empty-state compact" id="dashRecentEmpty" hidden>
+                                <p>No hay pedidos registrados todavía.</p>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h3>Pedidos activos</h3>
+                                    <p>En preparación dentro de cocina</p>
+                                </div>
+                                <span class="panel-tag orange" id="dashActiveCount">0</span>
+                            </div>
+                            <div id="dashActiveOrders" class="active-list"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PEDIDOS -->
+                <section class="admin-section" id="section-pedidos" data-title="Pedidos" hidden>
+                    <div class="section-head">
+                        <div>
+                            <h2>Gestión de pedidos</h2>
+                            <p>Consulta, filtra y actualiza el estado de las comandas.</p>
+                        </div>
+                        <button class="btn btn-light" type="button" id="refreshOrders">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 5v6h-6"/></svg>
+                            Actualizar
+                        </button>
+                    </div>
+
+                    <div class="panel">
+                        <div class="filters">
+                            <div class="search-field">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                                <input id="ordersSearch" type="search" placeholder="Buscar por número, mesa, mesero o producto">
+                            </div>
+                            <select id="ordersState" aria-label="Filtrar por estado">
+                                <option value="">Todos los estados</option>
+                            </select>
+                            <select id="ordersMesa" aria-label="Filtrar por mesa">
+                                <option value="">Todas las mesas</option>
+                            </select>
+                            <button class="btn btn-primary" type="button" id="ordersApply">Aplicar filtros</button>
+                            <button class="btn btn-light" type="button" id="ordersClear">Limpiar</button>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table class="data-table orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Pedido</th>
+                                        <th>Mesa</th>
+                                        <th>Mesero</th>
+                                        <th>Fecha / hora</th>
+                                        <th>Productos</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                        <th class="align-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody"></tbody>
+                            </table>
+                        </div>
+                        <div class="empty-state" id="ordersEmpty" hidden>
+                            <div class="empty-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+                            </div>
+                            <h3>Sin pedidos para mostrar</h3>
+                            <p>Ajusta los filtros o registra un pedido desde el panel de mesero.</p>
+                        </div>
+                        <div class="table-footer">
+                            <span id="ordersCount">0 pedidos</span>
+                            <span class="muted-note">Actualización automática cada 15 segundos</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PRODUCTOS -->
+                <section class="admin-section" id="section-productos" data-title="Productos" hidden>
+                    <div class="section-head">
+                        <div>
+                            <h2>Productos</h2>
+                            <p>Catálogo de productos disponible en el modo demostración.</p>
+                        </div>
+                        <span class="pending-pill">CRUD pendiente de implementación</span>
+                    </div>
+
+                    <div class="notice">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+                        <p>La API actual permite consultar productos, pero todavía no expone creación, edición ni eliminación. Esta sección es de solo lectura para no simular acciones inexistentes.</p>
+                    </div>
+
+                    <div class="panel">
+                        <div class="table-wrap">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Precio</th>
+                                        <th>Disponibilidad</th>
+                                        <th class="align-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productsTableBody"></tbody>
+                            </table>
+                        </div>
+                        <div class="empty-state" id="productsEmpty" hidden>
+                            <h3>No hay productos disponibles</h3>
+                            <p>El catálogo DEMO no contiene productos.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CATEGORÍAS -->
+                <section class="admin-section" id="section-categorias" data-title="Categorías" hidden>
+                    <div class="section-head">
+                        <div>
+                            <h2>Categorías</h2>
+                            <p>Organización del menú por tipo de producto.</p>
+                        </div>
+                        <span class="pending-pill">Gestión pendiente de implementación</span>
+                    </div>
+
+                    <div class="notice">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+                        <p>Las categorías se consultan desde los catálogos DEMO. La API todavía no permite crear, editar ni eliminar categorías.</p>
+                    </div>
+
+                    <div class="category-grid" id="categoriesGrid"></div>
+                </section>
+
+                <!-- MESAS -->
+                <section class="admin-section" id="section-mesas" data-title="Mesas" hidden>
+                    <div class="section-head">
+                        <div>
+                            <h2>Mesas y puntos de entrega</h2>
+                            <p>Ocupación calculada a partir de los pedidos activos.</p>
+                        </div>
+                        <span class="pending-pill">Gestión pendiente de implementación</span>
+                    </div>
+
+                    <div class="notice">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+                        <p>La ocupación es informativa y se deduce de los pedidos no despachados. La API todavía no administra el estado de las mesas directamente.</p>
+                    </div>
+
+                    <div class="table-grid" id="tablesGrid"></div>
+                </section>
+
+                <!-- USUARIOS -->
+                <section class="admin-section" id="section-usuarios" data-title="Usuarios" hidden>
+                    <div class="section-head">
+                        <div>
+                            <h2>Usuarios y roles</h2>
+                            <p>Personal registrado y permisos asignados.</p>
+                        </div>
+                        <span class="demo-pill"><span></span> Contraseñas almacenadas con hash</span>
+                    </div>
+
+                    <div class="panel">
+                        <div class="table-wrap">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Teléfono</th>
+                                        <th>Rol</th>
+                                        <th>Estado</th>
+                                        <th>Registro</th>
+                                        <th class="align-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody"></tbody>
+                            </table>
+                        </div>
+                        <div class="empty-state" id="usersEmpty" hidden>
+                            <h3>No hay usuarios registrados</h3>
+                            <p>Registra personal desde la pantalla de creación de cuenta.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- REPORTES -->
+                <section class="admin-section" id="section-reportes" data-title="Reportes" hidden>
+                    <div class="section-head">
+                        <div>
+                            <h2>Reportes operativos</h2>
+                            <p>Indicadores calculados con los pedidos registrados.</p>
+                        </div>
+                        <button class="btn btn-light" type="button" id="exportReport">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+                            Exportar JSON
+                        </button>
+                    </div>
+
+                    <div class="stats-grid small" id="reportStats"></div>
+
+                    <div class="dashboard-grid">
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h3>Ventas por categoría</h3>
+                                    <p>Distribución de ingresos despachados</p>
+                                </div>
+                            </div>
+                            <div id="categorySales" class="bar-list"></div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div>
+                                    <h3>Productos más vendidos</h3>
+                                    <p>Unidades incluidas en los pedidos</p>
+                                </div>
+                            </div>
+                            <div id="topProducts" class="bar-list"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONFIGURACIÓN -->
+                <section class="admin-section" id="section-configuracion" data-title="Configuración" hidden>
+                    <div class="section-head">
+                        <div>
+                            <h2>Configuración del sistema</h2>
+                            <p>Información de ejecución y herramientas de demostración.</p>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <h3>Estado del sistema</h3>
+                                <p>Parámetros activos del backend</p>
+                            </div>
+                        </div>
+                        <div class="info-grid" id="systemInfo"></div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-head">
+                            <div>
+                                <h3>Herramientas de demostración</h3>
+                                <p>Restaura los datos simulados sin reiniciar el servidor.</p>
+                            </div>
+                        </div>
+                        <div class="button-row">
+                            <button class="btn btn-primary" type="button" id="demoResetBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 5v6h-6"/></svg>
+                                Restaurar datos DEMO
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="danger-panel">
+                        <div>
+                            <h3>Zona peligrosa</h3>
+                            <p>Estas acciones son irreversibles y están reservadas para demostraciones.</p>
+                        </div>
+                        <div class="button-row">
+                            <button class="btn btn-danger-light" type="button" id="clearOrdersBtn">Limpiar pedidos</button>
+                            <button class="btn btn-danger" type="button" id="clearAllBtn">Reiniciar todo el sistema</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
     </div>
 
-    <!-- Trigger oculto para inicializar el panel -->
-    <div id="adm-panel-trigger" class="hidden"></div>
+    <div class="modal-backdrop" id="modalBackdrop" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-head">
+                <div>
+                    <span class="eyebrow" id="modalEyebrow">Detalle</span>
+                    <h2 id="modalTitle">Título</h2>
+                </div>
+                <button class="icon-btn" type="button" id="modalClose" aria-label="Cerrar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
 
-    <div id="creator-watermark">Fast Food Service © SENA 2025</div>
+    <div class="toast-root" id="toastRoot" aria-live="polite"></div>
 
-    <script src="../assets/js/registro.js"></script>
-    <script>
-        // ── Protección de acceso ──
-        (function() {
-            const session = localStorage.getItem('ff_session');
-            if (!session) {
-                window.location.href = 'index.html';
-                return;
-            }
-            // Mostrar nombre de usuario en header
-            const nameEl = document.getElementById('adm-username');
-            if (nameEl) nameEl.textContent = session;
-        })();
-
-    </script>
+    <script src="../assets/js/admin.js"></script>
 </body>
 </html>

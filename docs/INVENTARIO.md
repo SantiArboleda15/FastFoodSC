@@ -12,9 +12,11 @@ La versión 2.5 se conservó como base funcional. Las carpetas `V0.5/`, `V1.5/`,
 FastFoodSC/
 ├── frontend/
 │   ├── assets/css/style.css
+│   ├── assets/css/admin.css
 │   ├── assets/fonts/
 │   ├── assets/img/image_414dac.png
 │   ├── assets/js/registro.js
+│   ├── assets/js/admin.js
 │   ├── assets/js/theme-editor.js
 │   ├── components/
 │   ├── pages/index.html
@@ -51,6 +53,7 @@ FastFoodSC/
 │   └── uploads/
 │
 ├── docs/
+│   ├── CREDENCIALES_DEMO.md
 │   ├── INVENTARIO.md
 │   └── legacy/
 │
@@ -111,15 +114,17 @@ Modos admitidos:
 | `roles1.html` | Selección de rol |
 | `meseros1.html` | Comanda, carrito y envío de pedidos mediante API |
 | `cosina1.html` | Monitor de cocina con actualización por API |
-| `admin.html` | Panel administrativo con estadísticas y tablas |
-| `registro.js` | Lógica compartida del frontend y aviso de modo DEMO |
+| `admin.html` | Panel administrativo rediseñado con dashboard, pedidos, catálogo, usuarios, reportes y configuración |
+| `admin.css` | Estilos propios del panel administrativo |
+| `admin.js` | Lógica del panel administrativo y consumo de la API |
+| `registro.js` | Lógica compartida del frontend, sesión y aviso de modo DEMO |
 | `theme-editor.js` | Editor de tema conservado de la versión base |
 
 El menú del mesero se carga desde `get_products`. Los pedidos de cocina y administración se consultan desde la API; ya no se leen pedidos desde `localStorage`.
 
 ## Datos DEMO
 
-- 4 usuarios: `fastfood`, `maria`, `carlos` y `laura`; contraseña `1234`.
+- 5 usuarios: `admin` (`AdminDemo2026!`) y los heredados `fastfood`, `maria`, `carlos` y `laura` (`1234`).
 - 12 productos.
 - 4 categorías: combos, pollo, burgers y extras.
 - 3 roles.
@@ -135,6 +140,8 @@ Acciones disponibles:
 
 - `login`
 - `register`
+- `me`
+- `logout`
 - `get_users`
 - `delete_user`
 - `get_products`
@@ -147,6 +154,9 @@ Acciones disponibles:
 - `clear_all`
 - `get_system_info`
 - `demo_reset`
+
+`get_users`, `delete_user`, `clear_orders`, `clear_all` y `demo_reset`
+requieren sesión PHP con rol `administrador`.
 
 ## Base de datos
 
@@ -165,11 +175,13 @@ Acciones disponibles:
 2. Definir migraciones y semillas PostgreSQL.
 3. Habilitar y documentar la extensión `pdo_pgsql`.
 4. Ejecutar las pruebas en un equipo con PHP 8 instalado.
-5. Reemplazar la autenticación en texto plano y la sesión en `localStorage` en una etapa posterior.
+5. Reforzar la sesión del frontend para que dependa únicamente de la sesión PHP.
 
 ## Notas de seguridad
 
-- La autenticación y la sesión se conservaron sin cambios funcionales.
-- Las contraseñas siguen en texto plano.
+- Las contraseñas DEMO se almacenan con hash bcrypt y se verifican con `password_verify()`.
+- La sesión autenticada vive en PHP; el frontend conserva una referencia en `localStorage`.
+- El panel administrativo valida sesión y rol antes de mostrar datos o ejecutar acciones.
+- Las credenciales de demostración están en `docs/CREDENCIALES_DEMO.md`.
 - El servidor embebido de PHP es solo para desarrollo local.
 - Los archivos `.htaccess` bloquean rutas internas cuando se usa Apache.

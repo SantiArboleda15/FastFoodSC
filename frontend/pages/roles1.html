@@ -81,8 +81,11 @@
             const avatar = document.getElementById('user-avatar');
             if (avatar) avatar.textContent = session.charAt(0).toUpperCase();
 
-            // ── Mostrar botón Admin SOLO si es fastfood ──
-            if (session === 'fastfood') {
+            // ── Mostrar botón Admin SOLO al rol administrador ──
+            const role = localStorage.getItem('ff_role') || '';
+            const isAdmin = role === 'administrador' || (!role && session === 'fastfood');
+
+            if (isAdmin) {
                 const btnAdmin = document.getElementById('btn-admin');
                 if (btnAdmin) btnAdmin.classList.remove('hidden');
             }

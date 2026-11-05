@@ -33,6 +33,7 @@ Con Node.js instalado:
 
 ```powershell
 node --check frontend/assets/js/registro.js
+node --check frontend/assets/js/admin.js
 node --check frontend/assets/js/theme-editor.js
 ```
 
@@ -45,14 +46,16 @@ node --check frontend/assets/js/theme-editor.js
    ```
 
 2. Abrir `http://localhost:8000/`.
-3. Iniciar sesión con el usuario inicial `fastfood` / `1234`.
-4. Registrar un empleado y comprobar que aparece en el panel admin.
-5. Crear un pedido desde el panel de mesero.
-6. Verificar que el pedido aparece en cocina.
-7. Avanzar el estado: pendiente → preparando → listo → despachado.
-8. Comprobar estadísticas, pedidos completados y pedidos activos.
-9. Cerrar sesión y verificar la redirección al login.
-10. Reiniciar el sistema y confirmar que vuelven los datos DEMO iniciales.
+3. Iniciar sesión con `admin` / `AdminDemo2026!`.
+4. Verificar que se abre `admin.html` y que el dashboard carga datos.
+5. Registrar un empleado y comprobar que aparece en Usuarios.
+6. Crear un pedido desde el panel de mesero.
+7. Verificar que el pedido aparece en cocina.
+8. Avanzar el estado: pendiente → preparando → listo → despachado.
+9. Comprobar estadísticas, reportes, pedidos completados y pedidos activos.
+10. Iniciar sesión con `maria` / `1234` y confirmar que `get_users` responde `403`.
+11. Cerrar sesión y verificar la redirección al login.
+12. Reiniciar el sistema y confirmar que vuelven los datos DEMO iniciales.
 
 ## Nota
 
